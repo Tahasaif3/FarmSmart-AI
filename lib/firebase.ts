@@ -19,4 +19,4 @@ const app = initializeApp(firebaseConfig)
 // Export services
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
-export const rtdb = getDatabase(app) // ✅ Realtime Database
+export const rtdb = getDatabase(app)
