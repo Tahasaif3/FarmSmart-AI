@@ -1,26 +1,132 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand Colors - Purple/Magenta Theme */
+  --primary: oklch(0.58 0.23 292);
+  --primary-light: oklch(0.75 0.18 289);
+  --primary-foreground: oklch(1 0 0);
+
+  --background: oklch(0.98 0.001 0);
+  --foreground: oklch(0.18 0.02 272);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.02 272);
+
+  --sidebar-bg: oklch(0.24 0.05 270);
+  --sidebar-foreground: oklch(0.95 0.01 0);
+
+  --accent: oklch(0.58 0.23 292);
+  --accent-foreground: oklch(1 0 0);
+
+  --border: oklch(0.93 0.005 0);
+  --input: oklch(0.97 0.003 0);
+  --muted: oklch(0.9 0.005 0);
+  --muted-foreground: oklch(0.6 0.01 0);
+
+  --chart-1: oklch(0.58 0.23 292);
+  --chart-2: oklch(0.7 0.15 240);
+  --chart-3: oklch(0.4 0.08 220);
+
+  --radius: 0.5rem;
+
+  /* Login page brand colors */
+  --login-brand-bg: #3d2d4c;
+}
+
+.dark {
+  --primary: oklch(0.75 0.18 289);
+  --primary-foreground: oklch(0.18 0.02 272);
+  --background: oklch(0.05 0.01 270);
+  --foreground: oklch(0.95 0.01 0);
+  --card: oklch(0.12 0.01 270);
+  --card-foreground: oklch(0.95 0.01 0);
+  --sidebar-bg: oklch(0.08 0.01 270);
 }
 
 @theme inline {
+  --font-sans: "IBM Plex Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.577 0.245 27.325);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: oklch(0.708 0 0);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: oklch(0.828 0.189 84.429);
+  --color-chart-5: oklch(0.769 0.188 70.08);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: oklch(0.985 0 0);
+  --color-sidebar-foreground: oklch(0.145 0 0);
+  --color-sidebar-primary: oklch(0.205 0 0);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.97 0 0);
+  --color-sidebar-accent-foreground: oklch(0.205 0 0);
+  --color-sidebar-border: oklch(0.922 0 0);
+  --color-sidebar-ring: oklch(0.708 0 0);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
+/* Smooth and modern scrollbar style */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.4); /* gray-400 */
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(147, 51, 234, 0.6); /* purple-600 hover */
+}
+
+/* Dark mode support */
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5); /* gray-500 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(168, 85, 247, 0.6); /* purple-500 hover */
+}
+
+/* Hide scrollbar until user scrolls (like macOS style) */
+body::-webkit-scrollbar {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+body:hover::-webkit-scrollbar,
+body:focus-within::-webkit-scrollbar {
+  opacity: 1;
 }
