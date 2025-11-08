@@ -151,6 +151,15 @@ export default function ChatPage() {
     }
   }
 
+  const deleteMessage = async (messageId: string) => {
+    if (!user?.uid || !chatId) return
+    try {
+      await remove(ref(rtdb, `chats/${user.uid}/${chatId}/messages/${messageId}`))
+    } catch (error) {
+      console.error("Error deleting message:", error)
+    }
+  }
+
   const deleteChat = async () => {
     if (!user?.uid || !chatId) return
     try {
@@ -182,8 +191,6 @@ export default function ChatPage() {
     scrollToBottom()
   }, [messages])
 
-  const chatTitle = messages.find((m) => m.type === "user")?.content.substring(0, 50) || "New Chat"
-
   return (
     <div className="flex flex-col md:flex-row h-screen bg-white dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
@@ -200,23 +207,16 @@ export default function ChatPage() {
         />
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Container */}
       <div className="flex-1 flex flex-col w-full h-screen overflow-hidden">
         <Header
-          title={chatTitle}
+          title="AI Chat"
           userName={userName}
           user={user}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         />
-        <button
-          onClick={deleteChat}
-          className="absolute top-4 right-4 text-red-500 hover:text-red-700 z-50"
-          title="Delete chat"
-        >
-          <Trash2 className="w-5 h-5" />
-        </button>
 
-        {/* Messages Area */}
+        {/* Messages Area - Scrollable */}
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center h-full px-2 sm:px-4">
@@ -264,13 +264,32 @@ export default function ChatPage() {
             </div>
           ) : (
             <div className="px-3 sm:px-6 py-4 sm:py-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">Chat History</h3>
+                <button
+                  onClick={deleteChat}
+                  className="text-red-500 hover:text-red-700 p-1"
+                  title="Delete chat"
+                >
+                  <Trash2 className="w-4 sm:w-5 h-4 sm:h-5" />
+                </button>
+              </div>
+
               <div className="space-y-4 sm:space-y-6">
                 {messages.map((message) => (
-                  <ChatMessage key={message.id} message={message} />
+                  <div key={message.id} className="group relative">
+                    <ChatMessage message={message} />
+                    <button
+                      onClick={() => deleteMessage(message.id)}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition text-red-500 hover:text-red-700 p-1"
+                      title="Delete message"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 ))}
-
                 {isLoading && (
-                  <div className="flex items-center gap-2 text-gray-500 mt-4">
+                  <div className="flex items-center gap-2 text-gray-500">
                     <Loader className="w-5 h-5 animate-spin" />
                     <span className="text-sm sm:text-base">Soft GPT is thinking...</span>
                   </div>
@@ -281,7 +300,7 @@ export default function ChatPage() {
           )}
         </div>
 
-        {/* Input Area */}
+        {/* Input Area - Fixed at Bottom */}
         {messages.length > 0 && (
           <div className="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 sm:p-4 flex items-center gap-2 sm:gap-3 flex-shrink-0">
             <input
