@@ -91,9 +91,6 @@ export default function DashboardPage({ user }: any) {
           {/* Welcome Section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
             <div className="mb-4 sm:mb-0">
-              <h2 className="text-xl sm:text-2xl font-bold text-purple-700 dark:text-purple-400 mb-1">
-                Dashboard
-              </h2>
               <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
                 Good morning, {userName}
               </h1>
