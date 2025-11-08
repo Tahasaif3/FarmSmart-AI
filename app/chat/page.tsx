@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Send, Paperclip, Trash2, Loader } from "lucide-react"
 import Sidebar from "@/components/sidebar"
+import Header from "@/components/header"
 import ChatMessage from "@/components/chat-message"
 import { useUser } from "@/app/context/user-context"
 import { ref, push, remove, update, onValue, query, orderByChild } from "firebase/database"
@@ -65,10 +66,7 @@ export default function ChatPage() {
       const chatsRef = ref(rtdb, `chats/${user.uid}`)
       const newChatRef = push(chatsRef)
       await update(newChatRef, {
-        title: "New Chat",
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        messages: {},
+        title: "New Chat", createdAt: Date.now(), updatedAt: Date.now(), messages: {},
       })
       setChatId(newChatRef.key || "")
       setMessages([])
@@ -79,13 +77,19 @@ export default function ChatPage() {
     }
   }
 
-  const saveMessageToFirebase = async (type: "user" | "assistant", content: string, chatIdParam?: string) => {
+  const saveMessageToFirebase = async (
+    type: "user" | "assistant",
+    content: string,
+    chatIdParam?: string
+  ) => {
     const id = chatIdParam || chatId
     if (!user?.uid || !id) return
     try {
       const messageRef = ref(rtdb, `chats/${user.uid}/${id}/messages`)
       const newMsgRef = push(messageRef)
-      const message: Message = { id: newMsgRef.key || "", type, content, timestamp: Date.now() }
+      const message: Message = {
+        id: newMsgRef.key || "", type, content, timestamp: Date.now(),
+      }
       await update(newMsgRef, message)
       await update(ref(rtdb, `chats/${user.uid}/${id}`), { updatedAt: Date.now() })
       return message
@@ -147,6 +151,15 @@ export default function ChatPage() {
     }
   }
 
+  const deleteMessage = async (messageId: string) => {
+    if (!user?.uid || !chatId) return
+    try {
+      await remove(ref(rtdb, `chats/${user.uid}/${chatId}/messages/${messageId}`))
+    } catch (error) {
+      console.error("Error deleting message:", error)
+    }
+  }
+
   const deleteChat = async () => {
     if (!user?.uid || !chatId) return
     try {
@@ -178,38 +191,50 @@ export default function ChatPage() {
     scrollToBottom()
   }, [messages])
 
-  const chatTitle = messages.find(m => m.type === "user")?.content.substring(0, 50) || "New Chat"
-
   return (
     <div className="flex flex-col md:flex-row h-screen bg-white dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? "translate-x-0" : "-translate-x-full"} fixed md:static top-0 left-0 h-full z-40 w-64 bg-white dark:bg-gray-900 shadow-lg transition-transform duration-300 md:translate-x-0`}>
-        <Sidebar isOpen={sidebarOpen} userName={userName} user={user} onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed md:static top-0 left-0 h-full z-40 w-64 bg-white dark:bg-gray-900 shadow-lg transition-transform duration-300 md:translate-x-0`}
+      >
+        <Sidebar
+          isOpen={sidebarOpen}
+          userName={userName}
+          user={user}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Container */}
       <div className="flex-1 flex flex-col w-full h-screen overflow-hidden">
-        {/* Chat Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900">
-          <h2 className="font-semibold text-gray-900 dark:text-gray-100 text-lg sm:text-xl truncate">{chatTitle}</h2>
-          <button onClick={deleteChat} title="Delete Chat" className="text-red-500 hover:text-red-700 p-1">
-            <Trash2 className="w-5 h-5" />
-          </button>
-        </div>
+        <Header
+          title="AI Chat"
+          userName={userName}
+          user={user}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-6">
+        {/* Messages Area - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center text-center h-full px-2 sm:px-4">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-gray-100 mb-8 sm:mb-10 font-mono">
                 What can I help with?
               </h2>
+
               <div className="flex items-center gap-2 sm:gap-3 border border-gray-300 dark:border-gray-700 rounded-xl px-3 sm:px-4 md:px-5 py-2 sm:py-3 bg-transparent w-full max-w-[95%] sm:max-w-[700px] md:max-w-[950px]">
                 <input
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage() } }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault()
+                      handleSendMessage()
+                    }
+                  }}
                   placeholder="Message Soft GPT"
                   disabled={isLoading}
                   className="flex-1 text-sm sm:text-base outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-transparent disabled:opacity-50"
@@ -238,42 +263,70 @@ export default function ChatPage() {
               </div>
             </div>
           ) : (
-            <div className="space-y-4 sm:space-y-6">
-              {messages.map((message) => (
-                <ChatMessage key={message.id} message={message} />
-              ))}
+            <div className="px-3 sm:px-6 py-4 sm:py-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">Chat History</h3>
+                <button
+                  onClick={deleteChat}
+                  className="text-red-500 hover:text-red-700 p-1"
+                  title="Delete chat"
+                >
+                  <Trash2 className="w-4 sm:w-5 h-4 sm:h-5" />
+                </button>
+              </div>
 
-              {isLoading && (
-                <div className="flex items-center gap-2 text-gray-500 mt-2">
-                  <Loader className="w-6 h-6 animate-spin" />
-                  <span className="text-sm sm:text-base">Soft GPT is thinking...</span>
-                </div>
-              )}
-              <div ref={messagesEndRef} />
+              <div className="space-y-4 sm:space-y-6">
+                {messages.map((message) => (
+                  <div key={message.id} className="group relative">
+                    <ChatMessage message={message} />
+                    <button
+                      onClick={() => deleteMessage(message.id)}
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition text-red-500 hover:text-red-700 p-1"
+                      title="Delete message"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {isLoading && (
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Loader className="w-5 h-5 animate-spin" />
+                    <span className="text-sm sm:text-base">Soft GPT is thinking...</span>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
             </div>
           )}
         </div>
 
-        {/* Input */}
-        <div className="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 sm:p-4 flex items-center gap-2 sm:gap-3 flex-shrink-0">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage() } }}
-            placeholder="Message Soft GPT"
-            disabled={isLoading}
-            className="flex-1 text-sm sm:text-base outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-transparent px-2 sm:px-3 disabled:opacity-50"
-          />
-          <Paperclip className="w-5 h-5 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 hidden sm:block" />
-          <button
-            onClick={handleSendMessage}
-            disabled={isLoading || isSending}
-            className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition disabled:opacity-50 flex-shrink-0"
-          >
-            {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-          </button>
-        </div>
+        {/* Input Area - Fixed at Bottom */}
+        {messages.length > 0 && (
+          <div className="border-t border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 p-2 sm:p-4 flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault()
+                  handleSendMessage()
+                }
+              }}
+              placeholder="Message Soft GPT"
+              disabled={isLoading}
+              className="flex-1 text-sm sm:text-base outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-transparent px-2 sm:px-3 disabled:opacity-50"
+            />
+            <Paperclip className="w-5 h-5 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 hidden sm:block" />
+            <button
+              onClick={handleSendMessage}
+              disabled={isLoading}
+              className="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg transition disabled:opacity-50 flex-shrink-0"
+            >
+              {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
