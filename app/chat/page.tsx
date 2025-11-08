@@ -18,6 +18,12 @@ interface Message {
   timestamp: number
 }
 
+interface Chat {
+  title: string
+  createdAt: number
+  updatedAt: number
+}
+
 export default function ChatPage() {
   const user = useUser()
   const [isSending, setIsSending] = useState(false)
@@ -26,6 +32,7 @@ export default function ChatPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [chatId, setChatId] = useState<string>("")
+  const [chatTitle, setChatTitle] = useState<string>("New Chat")
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const suggestedPrompts = [
@@ -41,8 +48,21 @@ export default function ChatPage() {
     if (urlChatId) {
       setChatId(urlChatId)
       loadChatHistory(urlChatId)
+      loadChatTitle(urlChatId)
     }
   }, [user?.uid])
+
+  const loadChatTitle = (id: string) => {
+    if (!user?.uid) return
+    const chatRef = ref(rtdb, `chats/${user.uid}/${id}`)
+    const unsubscribe = onValue(chatRef, (snapshot) => {
+      const data = snapshot.val() as Chat
+      if (data?.title) {
+        setChatTitle(data.title)
+      }
+    })
+    return unsubscribe
+  }
 
   const loadChatHistory = (id: string) => {
     if (!user?.uid) return
@@ -69,6 +89,7 @@ export default function ChatPage() {
         title: "New Chat", createdAt: Date.now(), updatedAt: Date.now(), messages: {},
       })
       setChatId(newChatRef.key || "")
+      setChatTitle("New Chat")
       setMessages([])
       return newChatRef.key || ""
     } catch (error) {
@@ -165,6 +186,7 @@ export default function ChatPage() {
     try {
       await remove(ref(rtdb, `chats/${user.uid}/${chatId}`))
       setChatId("")
+      setChatTitle("New Chat")
       setMessages([])
       window.history.back()
     } catch (error) {
@@ -176,9 +198,9 @@ export default function ChatPage() {
     if (messages.length === 1 && chatId && user?.uid) {
       const firstUserMsg = messages.find((m) => m.type === "user")
       if (firstUserMsg) {
-        update(ref(rtdb, `chats/${user.uid}/${chatId}`), {
-          title: firstUserMsg.content.substring(0, 50),
-        })
+        const newTitle = firstUserMsg.content.substring(0, 50)
+        setChatTitle(newTitle)
+        update(ref(rtdb, `chats/${user.uid}/${chatId}`), { title: newTitle })
       }
     }
   }, [messages, chatId, user?.uid])
@@ -215,6 +237,22 @@ export default function ChatPage() {
           user={user}
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
         />
+
+        {/* Chat Title Bar - Only visible when messages exist */}
+        {messages.length > 0 && (
+          <div className="border-b border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between flex-shrink-0">
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base truncate flex-1">
+              {chatTitle}
+            </h3>
+            <button
+              onClick={deleteChat}
+              className="text-red-500 hover:text-red-700 dark:hover:text-red-400 p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition flex-shrink-0 ml-2"
+              title="Delete chat"
+            >
+              <Trash2 className="w-4 sm:w-5 h-4 sm:h-5" />
+            </button>
+          </div>
+        )}
 
         {/* Messages Area - Scrollable */}
         <div className="flex-1 overflow-y-auto">
@@ -264,17 +302,6 @@ export default function ChatPage() {
             </div>
           ) : (
             <div className="px-3 sm:px-6 py-4 sm:py-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm sm:text-base">Chat History</h3>
-                <button
-                  onClick={deleteChat}
-                  className="text-red-500 hover:text-red-700 p-1"
-                  title="Delete chat"
-                >
-                  <Trash2 className="w-4 sm:w-5 h-4 sm:h-5" />
-                </button>
-              </div>
-
               <div className="space-y-4 sm:space-y-6">
                 {messages.map((message) => (
                   <div key={message.id} className="group relative">
