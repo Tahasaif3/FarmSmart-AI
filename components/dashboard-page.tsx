@@ -15,9 +15,20 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 export default function DashboardPage({ user }: any) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [upgradeOpen, setUpgradeOpen] = useState(false)
+  const [tipDialogOpen, setTipDialogOpen] = useState(false)
+  const [currentTip, setCurrentTip] = useState(0) // 0 = first tip, 1 = second tip
   const userName = user?.displayName || "User"
 
   const usageOverTimeData = [
@@ -31,53 +42,45 @@ export default function DashboardPage({ user }: any) {
   ]
 
   const mostUsedAIData = [
-    { name: "AI Coding", value: 35, fill: "#A855F7" },
-    { name: "AI Chat", value: 25, fill: "#9333EA" },
-    { name: "AI Text Generator", value: 20, fill: "#6B21A8" },
-    { name: "AI Image Generator", value: 20, fill: "#CBD5E1" },
+    { name: "AI Coding", value: 35, fill: "#059669" },
+    { name: "AI Chat", value: 25, fill: "#047857" },
+    { name: "AI Text Generator", value: 20, fill: "#10B981" },
+    { name: "AI Image Generator", value: 20, fill: "#A7F3D0" },
   ]
 
   const donutData = [
-    { name: "Used Queries", value: 750, fill: "#7E22CE" },
-    { name: "Remaining Queries", value: 250, fill: "#E2E8F0" },
+    { name: "Used Queries", value: 750, fill: "#059669" },
+    { name: "Remaining Queries", value: 250, fill: "#ECFDF5" },
   ]
 
-   // Automatically open on desktop, closed on mobile
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
-        setSidebarOpen(true);
+        setSidebarOpen(true)
       } else {
-        setSidebarOpen(false);
+        setSidebarOpen(false)
       }
-    };
-
-    handleResize(); // Run once when mounted
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   return (
     <div className="flex h-screen bg-background text-foreground transition-colors duration-300">
-      {/* Sidebar responsive */}
-      {/* Sidebar responsive */}
-<div
-  className={`${
-    sidebarOpen ? "translate-x-0" : "-translate-x-full"
-  } fixed md:static top-0 left-0 h-full z-40 w-64 bg-white dark:bg-gray-900 shadow-lg transition-transform duration-300 md:translate-x-0`}
->
-
-
-  {/* Sidebar content */}
-  <Sidebar
-    isOpen={sidebarOpen}
-    userName={userName}
-    user={user}
-    onMenuClick={() => setSidebarOpen(!sidebarOpen)}
-  />
-</div>
-
-
+      {/* Sidebar */}
+      <div
+        className={`${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } fixed md:static top-0 left-0 h-full z-40 w-64 bg-white dark:bg-gray-900 shadow-lg transition-transform duration-300 md:translate-x-0`}
+      >
+        <Sidebar
+          isOpen={sidebarOpen}
+          userName={userName}
+          user={user}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
+      </div>
 
       {/* Main Content */}
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -95,7 +98,10 @@ export default function DashboardPage({ user }: any) {
                 Good morning, {userName}
               </h1>
             </div>
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold text-sm transition w-full sm:w-auto">
+            <button
+              onClick={() => setUpgradeOpen(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-md font-semibold text-sm transition w-full sm:w-auto"
+            >
               Upgrade now
             </button>
           </div>
@@ -104,12 +110,12 @@ export default function DashboardPage({ user }: any) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
             {/* Card 1 */}
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3 pl-3">
                 Total Queries Today
               </h3>
               <div className="flex items-center justify-center mt-3">
-                <span className="text-5xl sm:text-6xl font-bold text-purple-600 dark:text-purple-400">
+                <span className="text-5xl sm:text-6xl font-bold text-emerald-600 dark:text-emerald-400">
                   75
                 </span>
               </div>
@@ -120,12 +126,12 @@ export default function DashboardPage({ user }: any) {
 
             {/* Card 2 */}
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3 pl-3">
                 Average Response Time
               </h3>
               <div className="flex items-center justify-center">
-                <span className="text-5xl sm:text-6xl font-bold text-purple-600 dark:text-purple-400">3</span>
+                <span className="text-5xl sm:text-6xl font-bold text-emerald-600 dark:text-emerald-400">3</span>
                 <span className="ml-2 mt-3 text-sm text-gray-500 dark:text-gray-400">sec</span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3 px-2 sm:px-3">
@@ -135,7 +141,7 @@ export default function DashboardPage({ user }: any) {
 
             {/* Card 3 - Pie Chart */}
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-3 pl-3">
                 Most Used AI Tool
               </h3>
@@ -177,7 +183,7 @@ export default function DashboardPage({ user }: any) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
             {/* Donut Chart */}
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 pl-3">
                 Query Usage
               </h3>
@@ -202,10 +208,10 @@ export default function DashboardPage({ user }: any) {
                 </div>
                 <div className="mt-4 flex flex-wrap justify-center gap-4 text-sm text-gray-600 dark:text-gray-300">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-purple-700"></span> Used Queries
+                    <span className="w-3 h-3 rounded-full bg-emerald-600"></span> Used Queries
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-gray-400 dark:bg-gray-600"></span> Remaining
+                    <span className="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600"></span> Remaining
                   </div>
                 </div>
               </div>
@@ -213,7 +219,7 @@ export default function DashboardPage({ user }: any) {
 
             {/* Line Chart */}
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
               <h3 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-4 pl-3">
                 Usage Over Time
               </h3>
@@ -234,8 +240,8 @@ export default function DashboardPage({ user }: any) {
                   <Line
                     type="monotone"
                     dataKey="value"
-                    stroke="#9333EA"
-                    dot={{ fill: "#9333EA", r: 4 }}
+                    stroke="#059669"
+                    dot={{ fill: "#059669", r: 4 }}
                     activeDot={{ r: 6 }}
                     strokeWidth={2}
                   />
@@ -244,9 +250,9 @@ export default function DashboardPage({ user }: any) {
             </div>
           </div>
 
-          {/* Tips Section */}
+          {/* ✅ Updated Tips Section with Dialog Triggers */}
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm rounded-lg p-5 relative transition-colors duration-300">
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-purple-600 rounded-l-lg" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-600 rounded-l-lg" />
             <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 pl-3">
               Tips & Updates
             </h3>
@@ -255,7 +261,13 @@ export default function DashboardPage({ user }: any) {
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   Quick guide for new features.
                 </p>
-                <button className="bg-purple-600 text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-purple-700 transition">
+                <button
+                  onClick={() => {
+                    setCurrentTip(0)
+                    setTipDialogOpen(true)
+                  }}
+                  className="bg-emerald-600 text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-emerald-700 transition"
+                >
                   Read more
                 </button>
               </div>
@@ -263,7 +275,13 @@ export default function DashboardPage({ user }: any) {
                 <p className="text-sm text-gray-600 dark:text-gray-300">
                   Pro Tips for optimizing GPT tools.
                 </p>
-                <button className="bg-purple-600 text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-purple-700 transition">
+                <button
+                  onClick={() => {
+                    setCurrentTip(1)
+                    setTipDialogOpen(true)
+                  }}
+                  className="bg-emerald-600 text-white text-xs sm:text-sm px-3 py-1 rounded-md hover:bg-emerald-700 transition"
+                >
                   Read more
                 </button>
               </div>
@@ -271,6 +289,111 @@ export default function DashboardPage({ user }: any) {
           </div>
         </main>
       </div>
+
+      {/* ✅ Upgrade Dialog */}
+      <Dialog open={upgradeOpen} onOpenChange={setUpgradeOpen}>
+        <DialogContent className="bg-white dark:bg-gray-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-emerald-600 dark:text-emerald-400">
+              Unlock Premium Features
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 dark:text-gray-400">
+              Go Pro and get unlimited access to all AI tools.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4 space-y-3 text-sm text-gray-700 dark:text-gray-300">
+            <div className="flex items-start gap-2">
+              <span className="text-emerald-500 mt-0.5">✓</span>
+              <span>Unlimited AI queries per day</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-emerald-500 mt-0.5">✓</span>
+              <span>Priority response time</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-emerald-500 mt-0.5">✓</span>
+              <span>Advanced AI models (GPT-4, Claude, etc.)</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-emerald-500 mt-0.5">✓</span>
+              <span>Export chat history & analytics</span>
+            </div>
+          </div>
+
+          <DialogFooter className="gap-2">
+            <button
+              onClick={() => setUpgradeOpen(false)}
+              className="px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                // Add your upgrade logic (e.g., redirect to Stripe)
+                alert("Redirecting to checkout...")
+                setUpgradeOpen(false)
+              }}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-medium transition"
+            >
+              Upgrade Plan
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ✅ Tips Dialog */}
+      <Dialog open={tipDialogOpen} onOpenChange={setTipDialogOpen}>
+        <DialogContent className="bg-white dark:bg-gray-800 max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-emerald-600 dark:text-emerald-400">
+              {currentTip === 0
+                ? "New Features Guide"
+                : "Pro Tips for AI Tools"}
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 dark:text-gray-400">
+              {currentTip === 0
+                ? "Get the most out of our latest updates."
+                : "Boost your productivity with these expert tips."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4 text-sm text-gray-700 dark:text-gray-300 space-y-3">
+            {currentTip === 0 ? (
+              <>
+                <p>Our newest features include:</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Real-time AI code suggestions</li>
+                  <li>Image-to-text analysis</li>
+                  <li>One-click export to PDF</li>
+                  <li>Dark mode sync across devices</li>
+                </ul>
+                <p>Explore them under each AI tool section!</p>
+              </>
+            ) : (
+              <>
+                <p>Optimize your AI experience with these tips:</p>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Be specific in your prompts for better results</li>
+                  <li>Use “/” commands for quick actions (e.g., /image, /code)</li>
+                  <li>Save frequently used prompts in your history</li>
+                  <li>Enable “Smart Context” for longer conversations</li>
+                </ul>
+                <p>Happy prompting! 🌱</p>
+              </>
+            )}
+          </div>
+
+          <DialogFooter>
+            <button
+              onClick={() => setTipDialogOpen(false)}
+              className="w-full sm:w-auto px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md font-medium transition"
+            >
+              Got it
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
