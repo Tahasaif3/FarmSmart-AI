@@ -13,8 +13,11 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth"
 import { auth, googleProvider } from "@/lib/firebase"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
+  const router = useRouter() // ✅ Added for navigation
+
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -49,6 +52,8 @@ export default function LoginPage() {
       } else {
         await signInWithEmailAndPassword(auth, email, password)
       }
+      // ✅ Redirect to /chat on success
+      router.push("/chat")
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -62,6 +67,8 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await signInWithPopup(auth, googleProvider)
+      // ✅ Redirect to /chat on success
+      router.push("/chat")
     } catch (err: any) {
       setError(err.message)
     } finally {
