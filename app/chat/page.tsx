@@ -8,7 +8,7 @@ import { useUser } from "@/app/context/user-context"
 import { ref, push, remove, update, onValue, query, orderByChild } from "firebase/database"
 import { rtdb } from "@/lib/firebase"
 
-const API_BASE_URL = "https://tahasaif3-farmsmart-agritech.hf.space"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 interface Message {
   id: string
