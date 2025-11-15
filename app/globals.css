@@ -130,3 +130,443 @@ body:hover::-webkit-scrollbar,
 body:focus-within::-webkit-scrollbar {
   opacity: 1;
 }
+
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Brand Colors - Green Gradient Theme */
+  --primary: #228B22;
+  --primary-light: #4CBB17;
+  --primary-foreground: #ffffff;
+
+  --background: #ffffff;
+  --foreground: #0f1f14;
+  --card: #f8fdf6;
+  --card-foreground: #0f1f14;
+
+  --sidebar-bg: #0f1f14;
+  --sidebar-foreground: #ffffff;
+
+  --accent: #4CBB17;
+  --accent-foreground: #0f1f14;
+
+  --border: #e0e7e0;
+  --input: #f5fef5;
+  --muted: #e8f0e8;
+  --muted-foreground: #6b8e6b;
+
+  --chart-1: #228B22;
+  --chart-2: #4CBB17;
+  --chart-3: #0f1f14;
+
+  --radius: 0.75rem;
+
+  /* Gradient Colors */
+  --gradient-dark: #0f1f14;
+  --gradient-mid: #228B22;
+  --gradient-light: #4CBB17;
+}
+
+.dark {
+  --primary: #4CBB17;
+  --primary-foreground: #0f1f14;
+  --background: #0a1408;
+  --foreground: #e8f5e9;
+  --card: #111d0f;
+  --card-foreground: #e8f5e9;
+  --sidebar-bg: #0a1408;
+  --sidebar-foreground: #e8f5e9;
+  --border: #1b331b;
+  --input: #0f1f14;
+  --muted: #1b331b;
+}
+
+@theme inline {
+  --font-sans: "IBM Plex Mono", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.577 0.245 27.325);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: oklch(0.828 0.189 84.429);
+  --color-chart-5: oklch(0.769 0.188 70.08);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: oklch(0.985 0 0);
+  --color-sidebar-foreground: oklch(0.145 0 0);
+  --color-sidebar-primary: oklch(0.205 0 0);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.97 0 0);
+  --color-sidebar-accent-foreground: oklch(0.205 0 0);
+  --color-sidebar-border: oklch(0.922 0 0);
+  --color-sidebar-ring: oklch(0.708 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Enhanced scrollbar with green theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(34, 139, 34, 0.4);
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(76, 187, 23, 0.7);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(76, 187, 23, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(76, 187, 23, 0.8);
+}
+
+/* Message animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGreen {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(76, 187, 23, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(76, 187, 23, 0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-pulse-green {
+  animation: pulseGreen 2s infinite;
+}
+
+/* Gradient background utilities */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0f1f14 0%, #228B22 50%, #4CBB17 100%);
+}
+
+.bg-gradient-primary-dark {
+  background: linear-gradient(135deg, #0a1408 0%, #111d0f 50%, #0f1f14 100%);
+}
+.bg-gradient-hover:hover {
+  background: linear-gradient(135deg, #4CBB17 0%, #228B22 50%, #0f1f14 100%);
+}
+
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Brand Colors - Green Gradient Theme Only */
+  --primary: #228B22;
+  --primary-light: #4CBB17;
+  --primary-foreground: #ffffff;
+
+  --background: #0f1f14;
+  --foreground: #ffffff;
+  --card: #1a3a1a;
+  --card-foreground: #ffffff;
+
+  --sidebar-bg: #0f1f14;
+  --sidebar-foreground: #ffffff;
+
+  --accent: #4CBB17;
+  --accent-foreground: #0f1f14;
+
+  --border: #228B22;
+  --input: #1a3a1a;
+  --muted: #2d5a2d;
+  --muted-foreground: #b8e6b8;
+
+  --chart-1: #228B22;
+  --chart-2: #4CBB17;
+  --chart-3: #0f1f14;
+
+  --radius: 0.75rem;
+
+  /* Gradient Colors */
+  --gradient-dark: #0f1f14;
+  --gradient-mid: #228B22;
+  --gradient-light: #4CBB17;
+}
+
+@theme inline {
+  --font-sans: "IBM Plex Mono", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.145 0 0);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: oklch(0.97 0 0);
+  --color-secondary-foreground: oklch(0.205 0 0);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: oklch(0.577 0.245 27.325);
+  --color-destructive-foreground: oklch(0.577 0.245 27.325);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--primary);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: oklch(0.828 0.189 84.429);
+  --color-chart-5: oklch(0.769 0.188 70.08);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: oklch(0.985 0 0);
+  --color-sidebar-foreground: oklch(0.145 0 0);
+  --color-sidebar-primary: oklch(0.205 0 0);
+  --color-sidebar-primary-foreground: oklch(0.985 0 0);
+  --color-sidebar-accent: oklch(0.97 0 0);
+  --color-sidebar-accent-foreground: oklch(0.205 0 0);
+  --color-sidebar-border: oklch(0.922 0 0);
+  --color-sidebar-ring: oklch(0.708 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-gradient-primary text-foreground;
+  }
+}
+
+/* Enhanced scrollbar with green theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(76, 187, 23, 0.4);
+  border-radius: 9999px;
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(76, 187, 23, 0.8);
+}
+
+/* Enhanced animations for mind-blowing UI */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(76, 187, 23, 0.3), 0 0 20px rgba(34, 139, 34, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(76, 187, 23, 0.6), 0 0 30px rgba(34, 139, 34, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Gradient background utilities */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0f1f14 0%, #228B22 50%, #4CBB17 100%);
+}
+
+.bg-gradient-card {
+  background: linear-gradient(135deg, rgba(34, 139, 34, 0.1) 0%, rgba(76, 187, 23, 0.05) 100%);
+  border: 1px solid rgba(76, 187, 23, 0.3);
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, #4CBB17 0%, #228B22 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass-morphism {
+  background: rgba(34, 139, 34, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(76, 187, 23, 0.2);
+}
