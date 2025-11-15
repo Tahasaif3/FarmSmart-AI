@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { IBM_Plex_Mono } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/next"
 import { UserProvider } from "@/app/context/user-context"
+import { ThemeProvider } from "next-themes" // <-- Import ThemeProvider
 import "./globals.css"
 
 const ibmPlexMono = IBM_Plex_Mono({ weight: ["400", "500", "600", "700"], subsets: ["latin"] })
@@ -20,10 +21,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ibmPlexMono.className} antialiased bg-gradient-primary`}>
-        <UserProvider>
-          {children}
-        </UserProvider>
+      <body className={`${ibmPlexMono.className} antialiased`}>
+<ThemeProvider attribute="class" enableSystem={true} defaultTheme="light">
+          <UserProvider>
+            {children}
+          </UserProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>
