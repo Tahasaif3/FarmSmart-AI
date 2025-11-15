@@ -1,8 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { IBM_Plex_Mono } from "next/font/google"
+import { IBM_Plex_Mono } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/next"
-import { ThemeProvider } from "@/components/theme-provider"
 import { UserProvider } from "@/app/context/user-context"
 import "./globals.css"
 
@@ -21,11 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ibmPlexMono.className} antialiased`}>
+      <body className={`${ibmPlexMono.className} antialiased bg-gradient-primary`}>
         <UserProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
-        </ThemeProvider>
         </UserProvider>
         <Analytics />
       </body>
