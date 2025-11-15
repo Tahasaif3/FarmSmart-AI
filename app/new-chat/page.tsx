@@ -33,7 +33,7 @@ export default function NewChatPage() {
     { icon: Monitor, label: "AI Computer Use", id: "computer" },
   ]
 
-  // ✅ Responsive sidebar behavior (same as ChatPage)
+  // Responsive sidebar
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -42,7 +42,6 @@ export default function NewChatPage() {
         setSidebarOpen(false)
       }
     }
-
     handleResize()
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
@@ -68,7 +67,7 @@ export default function NewChatPage() {
     return () => unsubscribe()
   }, [user?.uid])
 
-  // Fetch all chats for dialog
+  // Fetch all chats
   useEffect(() => {
     if (!user?.uid) return
     const chatsRef = ref(rtdb, `chats/${user.uid}`)
@@ -90,8 +89,7 @@ export default function NewChatPage() {
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-950 overflow-hidden">
-
-      {/* ✅ Sidebar (Drawer on mobile, fixed on desktop) */}
+      {/* Sidebar */}
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -105,8 +103,7 @@ export default function NewChatPage() {
         />
       </div>
 
-
-      {/* ✅ Main content */}
+      {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <Header
           title=""
@@ -121,34 +118,31 @@ export default function NewChatPage() {
           </h2>
 
           {/* Assistant Buttons */}
-         {/* Assistant Buttons */}
-<div className="w-full max-w-2xl mb-20 flex flex-wrap justify-center gap-4">
-  {assistants.map((assistant) => {
-    const Icon = assistant.icon
-    return (
-      <button
-        key={assistant.id}
-        onClick={() => router.push(`/${assistant.id}`)}
-        className="flex items-center justify-center gap-3 px-5 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg 
-           bg-white dark:bg-gray-900 transition-all duration-200 ease-in-out
-           hover:border-purple-500 hover:shadow-md active:scale-95 group 
-           active:bg-purple-50 dark:active:bg-gray-800 
-           w-full sm:w-auto h-14">
-
-        <Icon
-          className="w-6 h-6 mb-2 text-gray-700 dark:text-gray-300 
-                     group-hover:text-purple-600 dark:group-hover:text-purple-400 transition"
-        />
-        <span
-          className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 text-center
-                     group-hover:text-purple-600 dark:group-hover:text-purple-400 transition"
-        >
-          {assistant.label}
-        </span>
-      </button>
-    )
-  })}
-</div>
+          <div className="w-full max-w-2xl mb-20 flex flex-wrap justify-center gap-4">
+            {assistants.map((assistant) => {
+              const Icon = assistant.icon
+              return (
+                <button
+                  key={assistant.id}
+                  onClick={() => router.push(`/${assistant.id}`)}
+                  className="flex items-center justify-center gap-3 px-5 py-3 border-2 border-gray-300 dark:border-gray-700 rounded-lg 
+                    bg-white dark:bg-gray-900 transition-all duration-200 ease-in-out
+                    hover:border-emerald-500 hover:shadow-md active:scale-95 group 
+                    active:bg-emerald-50 dark:active:bg-gray-800 
+                    w-full sm:w-auto h-14"
+                >
+                  <Icon
+                    className="w-6 h-6 mb-2 text-gray-700 dark:text-gray-300 
+                               group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition"
+                  />
+                  <span className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 text-center
+                                   group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+                    {assistant.label}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
 
           <div className="w-full max-w-3xl border-t border-gray-200 dark:border-gray-800 mb-10"></div>
 
@@ -161,14 +155,14 @@ export default function NewChatPage() {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <button className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm font-medium transition flex items-center gap-1">
+                  <button className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 text-sm font-medium transition flex items-center gap-1">
                     View all <span>›</span>
                   </button>
                 </DialogTrigger>
 
                 <DialogContent className="max-w-md bg-white dark:bg-gray-800">
                   <DialogHeader>
-                    <DialogTitle className="text-purple-700 dark:text-purple-400">
+                    <DialogTitle className="text-emerald-600 dark:text-emerald-400">
                       All Chats
                     </DialogTitle>
                   </DialogHeader>
@@ -204,12 +198,12 @@ export default function NewChatPage() {
                   <div
                     key={item.id}
                     onClick={() => router.push(`/chat/${item.id}`)}
-                    className="p-4 border-l-4 border-l-purple-600 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition cursor-pointer group bg-white dark:bg-gray-900"
+                    className="p-4 border-l-4 border-l-emerald-600 border border-gray-200 dark:border-gray-800 rounded-lg hover:shadow-md transition cursor-pointer group bg-white dark:bg-gray-900"
                   >
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition font-['IBM Plex Mono'] line-clamp-2">
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition font-['IBM Plex Mono'] line-clamp-2">
                       {item.title}
                     </h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-purple-500 dark:group-hover:text-purple-300 transition">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 group-hover:text-emerald-500 dark:group-hover:text-emerald-300 transition">
                       {item.createdAt
                         ? new Date(item.createdAt).toLocaleString()
                         : "Unknown time"}

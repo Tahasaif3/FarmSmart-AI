@@ -48,7 +48,7 @@ const menuItems = [
 export default function Sidebar({ isOpen, userName, user, onMenuClick }: SidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const [chats, setChats] = useState<any[]>([])
+  const [chats, setChats] = useState<any[]>(([]))
 
   useEffect(() => {
     if (!user?.uid) return
@@ -93,7 +93,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         {/* Header */}
         <div className="p-6 flex items-center justify-between">
           <h2
-            className={`text-2xl font-bold text-purple-700 dark:text-purple-400 transition-all duration-300 ${
+            className={`text-2xl font-bold text-emerald-600 dark:text-emerald-400 transition-all duration-300 ${
               !isOpen && "opacity-0 w-0 md:opacity-100 md:w-auto"
             }`}
           >
@@ -120,7 +120,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 onClick={() => router.push(`/${item.id}`)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all ${
                   active
-                    ? "bg-purple-600 text-white shadow-sm"
+                    ? "bg-emerald-600 text-white shadow-sm"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
               >
@@ -152,7 +152,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 <p
                   key={chat.id}
                   onClick={() => router.push(`/chat?chat=${chat.id}`)}
-                  className="hover:text-purple-600 dark:hover:text-purple-400 cursor-pointer truncate"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer truncate"
                 >
                   {chat.title || "Untitled chat"}
                 </p>
@@ -163,14 +163,14 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
             <Dialog>
               <DialogTrigger asChild>
-                <button className="text-purple-600 dark:text-purple-400 hover:underline text-xs font-medium">
+                <button className="text-emerald-600 dark:text-emerald-400 hover:underline text-xs font-medium">
                   View all
                 </button>
               </DialogTrigger>
 
               <DialogContent className="max-w-md bg-white dark:bg-gray-800">
                 <DialogHeader>
-                  <DialogTitle className="text-purple-700 dark:text-purple-400">
+                  <DialogTitle className="text-emerald-600 dark:text-emerald-400">
                     All Chats
                   </DialogTitle>
                 </DialogHeader>
@@ -216,7 +216,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 className="rounded-full border border-gray-300 dark:border-gray-700"
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold">
+              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold">
                 {userName?.charAt(0).toUpperCase() || "U"}
               </div>
             )}

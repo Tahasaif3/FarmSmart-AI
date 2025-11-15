@@ -28,7 +28,7 @@ export default function ChatHistoryPage() {
   const [isLoading, setIsLoading] = useState(true)
   const userName = user?.displayName || "User"
 
-  // ✅ Responsive sidebar like ChatPage
+  // Responsive sidebar
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -42,7 +42,7 @@ export default function ChatHistoryPage() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  // ✅ Load chats
+  // Load chats
   useEffect(() => {
     if (!user?.uid) return
     const chatsRef = ref(rtdb, `chats/${user.uid}`)
@@ -71,7 +71,7 @@ export default function ChatHistoryPage() {
     return () => unsubscribe()
   }, [user?.uid])
 
-  // ✅ Filter chats
+  // Filter chats
   useEffect(() => {
     if (!searchQuery.trim()) {
       setFilteredChats(chats)
@@ -84,7 +84,7 @@ export default function ChatHistoryPage() {
     }
   }, [searchQuery, chats])
 
-  // ✅ Delete chat
+  // Delete chat
   const handleDeleteChat = async (chatId: string, e: React.MouseEvent) => {
     e.stopPropagation()
     if (!user?.uid) return
@@ -112,7 +112,7 @@ export default function ChatHistoryPage() {
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-950">
-      {/* ✅ Sidebar (Responsive Drawer) */}
+      {/* Sidebar */}
       <div
         className={`${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -126,7 +126,7 @@ export default function ChatHistoryPage() {
         />
       </div>
 
-      {/* ✅ Main Section */}
+      {/* Main Section */}
       <div className="flex-1 flex flex-col">
         <Header
           title="Chat History"
@@ -156,15 +156,15 @@ export default function ChatHistoryPage() {
                   placeholder="Search your chats..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 sm:py-4 border-2 border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-purple-500 dark:focus:border-purple-500 transition"
+                  className="w-full pl-12 pr-4 py-3 sm:py-4 border-2 border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-emerald-500 dark:focus:border-emerald-500 transition"
                 />
               </div>
             </div>
 
-            {/* ✅ Chat List */}
+            {/* Chat List */}
             {isLoading ? (
               <div className="text-center py-16">
-                <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-purple-600 border-t-transparent"></div>
+                <div className="inline-block animate-spin rounded-full h-10 w-10 border-4 border-emerald-600 border-t-transparent"></div>
                 <p className="mt-4 text-gray-600 dark:text-gray-400 text-lg">
                   Loading your chats...
                 </p>
@@ -183,7 +183,7 @@ export default function ChatHistoryPage() {
                 {!searchQuery && (
                   <button
                     onClick={() => router.push("/chat")}
-                    className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-medium transition shadow-md hover:shadow-lg"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-medium transition shadow-md hover:shadow-lg"
                   >
                     Start Your First Chat
                   </button>
@@ -195,11 +195,11 @@ export default function ChatHistoryPage() {
                   <div
                     key={chat.id}
                     onClick={() => handleContinueChat(chat.id)}
-                    className="group bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 rounded-xl p-5 sm:p-6 hover:shadow-lg hover:border-purple-500 dark:hover:border-purple-500 transition-all cursor-pointer"
+                    className="group bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-800 rounded-xl p-5 sm:p-6 hover:shadow-lg hover:border-emerald-500 dark:hover:border-emerald-500 transition-all cursor-pointer"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition font-['IBM_Plex_Mono']">
+                        <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition font-['IBM_Plex_Mono']">
                           {chat.title}
                         </h3>
                         <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">

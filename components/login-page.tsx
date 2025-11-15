@@ -169,7 +169,7 @@ export default function LoginPage() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="Your name"
-                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition ${
+                  className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                     isDark
                       ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
                       : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
@@ -190,7 +190,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@email.com"
                   required
-                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition ${
+                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                     isDark
                       ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
                       : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
@@ -212,7 +212,7 @@ export default function LoginPage() {
                   placeholder="Min. 6 characters"
                   required
                   minLength={6}
-                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition ${
+                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                     isDark
                       ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
                       : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
@@ -229,7 +229,7 @@ export default function LoginPage() {
                     id="remember"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 accent-purple-500 cursor-pointer rounded"
+                    className="w-4 h-4 accent-emerald-500 cursor-pointer rounded"
                   />
                   <label
                     htmlFor="remember"
@@ -241,7 +241,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
-                  className="text-sm text-purple-600 hover:underline font-medium"
+                  className="text-sm text-emerald-600 hover:underline font-medium"
                 >
                   Forgot password?
                 </button>
@@ -251,7 +251,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50 mt-6"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50 mt-6"
             >
               {loading ? "Loading..." : isSignUp ? "Sign up" : "Sign in"}
             </button>
@@ -261,14 +261,14 @@ export default function LoginPage() {
             {isSignUp ? (
               <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 Already have an account?{" "}
-                <button onClick={() => setIsSignUp(false)} className="text-purple-600 hover:underline font-medium">
+                <button onClick={() => setIsSignUp(false)} className="text-emerald-600 hover:underline font-medium">
                   Sign in
                 </button>
               </p>
             ) : (
               <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 Not registered yet?{" "}
-                <button onClick={() => setIsSignUp(true)} className="text-purple-600 hover:underline font-medium">
+                <button onClick={() => setIsSignUp(true)} className="text-emerald-600 hover:underline font-medium">
                   Create an Account
                 </button>
               </p>
@@ -340,7 +340,7 @@ export default function LoginPage() {
                     value={forgotPasswordEmail}
                     onChange={(e) => setForgotPasswordEmail(e.target.value)}
                     placeholder="you@email.com"
-                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition ${
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                       isDark
                         ? "bg-gray-800 border-gray-700 text-white placeholder-gray-500"
                         : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
@@ -352,7 +352,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={forgotPasswordLoading}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50"
               >
                 {forgotPasswordLoading ? "Sending..." : "Send Reset Link"}
               </button>
@@ -382,36 +382,36 @@ export default function LoginPage() {
       <div
         className={`hidden lg:flex w-1/2 items-center justify-center p-8 transition-colors duration-300 ${
           isDark
-            ? "bg-linear-to-br from-gray-900 to-gray-800 border-l border-gray-800"
-            : "bg-[#3D2D4C]"
+            ? "bg-gradient-to-br from-emerald-900 to-emerald-800 border-l border-emerald-800"
+            : "bg-gradient-to-br from-emerald-800 to-emerald-900"
         }`}
       >
         <div className="text-center">
           <div className="mb-6">
             <div
               className={`w-16 h-16 rounded-full mx-auto flex items-center justify-center text-2xl font-bold ${
-                isDark ? "bg-purple-900/40 text-purple-300" : "bg-white/20 text-white"
+                isDark ? "bg-emerald-800/50 text-emerald-200" : "bg-white/20 text-emerald-100"
               }`}
             >
-              ✨
+              🌱
             </div>
           </div>
 
           <h1 className="text-5xl font-bold text-white mb-3">Soft GPT</h1>
-          <p className="text-lg text-purple-100 mb-8">AI-powered virtual assistant</p>
+          <p className="text-lg text-emerald-100 mb-8">AI-powered virtual assistant</p>
 
           {/* Theme Buttons */}
           <div
             className={`inline-flex items-center rounded-full border overflow-hidden ${
-              isDark ? "border-purple-800" : "border-white/30"
+              isDark ? "border-emerald-700" : "border-white/30"
             }`}
           >
             <button
               onClick={() => setTheme("light")}
               className={`px-5 py-2 text-sm font-medium transition-colors ${
                 !isDark
-                  ? "bg-white text-purple-700"
-                  : "bg-transparent text-purple-300 hover:bg-purple-800/30"
+                  ? "bg-white text-emerald-700"
+                  : "bg-transparent text-emerald-200 hover:bg-emerald-700/30"
               }`}
             >
               Light mode
@@ -420,7 +420,7 @@ export default function LoginPage() {
               onClick={() => setTheme("dark")}
               className={`px-5 py-2 text-sm font-medium transition-colors ${
                 isDark
-                  ? "bg-purple-700 text-white"
+                  ? "bg-emerald-600 text-white"
                   : "bg-transparent text-white hover:bg-white/20"
               }`}
             >
