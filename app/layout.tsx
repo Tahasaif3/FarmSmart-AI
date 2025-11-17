@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { UserProvider } from "@/app/context/user-context"
 import { ThemeProvider } from "next-themes" // <-- Import ThemeProvider
 import "./globals.css"
+export const dynamic = "force-dynamic";
 
 const ibmPlexMono = IBM_Plex_Mono({ weight: ["400", "500", "600", "700"], subsets: ["latin"] })
 
