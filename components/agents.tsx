@@ -19,7 +19,7 @@ interface AgentsResponse {
   specialized_agents: Array<Omit<Agent, 'category' | 'isDocument'>>;
 }
 
-const API_BASE_URL = "https://tahasaif3-farmsmart-agritech.hf.space";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export function AgentsList() {
   const [agents, setAgents] = useState<AgentsResponse | null>(null);
