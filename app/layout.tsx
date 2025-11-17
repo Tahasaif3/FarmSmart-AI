@@ -10,9 +10,9 @@ export const dynamic = "force-dynamic";
 const ibmPlexMono = IBM_Plex_Mono({ weight: ["400", "500", "600", "700"], subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Soft GPT",
+  title: "FarmSmart AI",
   description: "AI-powered virtual assistant",
-  generator: "v0.app",
+  generator: "Taha Saif",
 }
 
 export default function RootLayout({
