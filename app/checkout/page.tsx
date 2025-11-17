@@ -1,6 +1,7 @@
 // app/checkout/page.tsx
 "use client"
 
+export const dynamic = "force-dynamic";
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,20 @@ import { loadStripe } from "@stripe/stripe-js"
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "")
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * CheckoutPage
+ *
+ * The CheckoutPage component renders a checkout form for a farm.
+ * It takes a plan as a parameter and renders a summary of the plan,
+ * an error message if there is one, and a checkout button.
+ * When the checkout button is clicked, it creates a Stripe Checkout Session
+ * and redirects the user to it.
+ *
+ * @returns {JSX.Element} A JSX element representing the checkout form.
+ */
+
+/*******  9a6a9415-f709-4bd7-9667-7c7fa33ecfd2  *******/
 export default function CheckoutPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
