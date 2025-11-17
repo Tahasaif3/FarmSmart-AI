@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true);
@@ -148,18 +149,20 @@ export function PricingSection() {
 
                 {/* CTA Button */}
                 <div className="mt-auto pt-4">
-                  <Button
-                    variant={plan.buttonVariant as any}
-                    className={`w-full rounded-full font-semibold py-5 text-base transition-transform hover:scale-[1.02] ${
-                      plan.popular
-                        ? "bg-emerald-500 hover:bg-emerald-400 text-emerald-900 shadow-lg shadow-emerald-500/30"
-                        : plan.buttonVariant === "outline"
-                        ? "border-white/20 text-white hover:bg-white/10"
-                        : ""
-                    }`}
-                  >
-                    {plan.buttonText}
-                  </Button>
+ <Link href="/login" passHref>
+    <Button
+      variant={plan.buttonVariant as any}
+      className={`w-full rounded-full font-semibold py-5 text-base transition-transform hover:scale-[1.02] ${
+        plan.popular
+          ? "bg-emerald-500 hover:bg-emerald-400 text-emerald-900 shadow-lg shadow-emerald-500/30"
+          : plan.buttonVariant === "outline"
+          ? "border-white/20 text-white hover:bg-white/10"
+          : ""
+      }`}
+    >
+      {plan.buttonText}
+    </Button>
+  </Link>
                 </div>
               </div>
 

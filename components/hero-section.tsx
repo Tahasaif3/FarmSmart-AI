@@ -33,14 +33,22 @@ export function HeroSection() {
         {/* CTA Buttons */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           {/* Glowing Animated Gradient Button */}
-          <Link href="https://vercel.com/home" target="_blank" rel="noopener noreferrer">
-            <div className="relative group">
-              <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 opacity-75 blur animate-gradient-rotation"></div>
-              <Button className="relative bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3.5 rounded-full font-semibold text-lg shadow-lg shadow-emerald-500/20 transition-all duration-300 transform group-hover:scale-[1.02]">
-                Get Started
-              </Button>
-            </div>
-          </Link>
+         <Link href="/login" target="_blank" rel="noopener noreferrer">
+  <div className="relative group">
+    {/* Animated gradient border */}
+    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 opacity-75 blur-xl animate-gradient-rotation"></div>
+    
+    {/* Button */}
+    <Button className="relative bg-primary text-primary-foreground px-10 py-4 rounded-full font-semibold text-lg shadow-xl shadow-emerald-500/30 transition-all duration-300 transform 
+                       group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-500/40 active:scale-95">
+      Get Started
+    </Button>
+
+    {/* Optional ripple effect */}
+    <span className="absolute inset-0 rounded-full bg-white opacity-0 transition-opacity duration-500 group-active:opacity-10"></span>
+  </div>
+</Link>
+
 
           <Link href="#features-section">
             <Button
