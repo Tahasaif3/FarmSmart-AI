@@ -1,12 +1,40 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true);
+  const [salesDialogOpen, setSalesDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", company: "" });
+  const [toastMessage, setToastMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
+
+const showToastNotification = (message: string) => {
+  setToastMessage(message);
+  setShowToast(true);
+  setTimeout(() => setShowToast(false), 4000); // auto-hide after 4s
+};
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  setSalesDialogOpen(false);
+  showToastNotification(`Thanks ${formData.name}, our sales team will contact you soon!`);
+  setFormData({ name: "", email: "", company: "" });
+};
 
   const pricingPlans = [
     {
@@ -14,13 +42,7 @@ export function PricingSection() {
       monthlyPrice: "$0",
       annualPrice: "$0",
       description: "Ideal for small farms getting started with AI.",
-      features: [
-        "Basic crop monitoring",
-        "Weather alerts",
-        "Soil analysis reports",
-        "Up to 2 AI farm agents",
-        "Mobile app access",
-      ],
+      features: ["Basic crop monitoring", "Weather alerts", "Soil analysis reports", "Up to 2 AI farm agents", "Mobile app access"],
       buttonText: "Get Started",
       buttonVariant: "outline",
     },
@@ -29,13 +51,7 @@ export function PricingSection() {
       monthlyPrice: "$50",
       annualPrice: "$40",
       description: "Perfect for growing farms looking to optimize yield.",
-      features: [
-        "Advanced crop and soil analysis",
-        "Multiple farm integration",
-        "Up to 10 AI farm agents",
-        "Automated irrigation recommendations",
-        "Priority support",
-      ],
+      features: ["Advanced crop and soil analysis", "Multiple farm integration", "Up to 10 AI farm agents", "Automated irrigation recommendations", "Priority support"],
       buttonText: "Join Now",
       buttonVariant: "default",
       popular: true,
@@ -45,13 +61,7 @@ export function PricingSection() {
       monthlyPrice: "$500",
       annualPrice: "$400",
       description: "Tailored solutions for large agricultural businesses.",
-      features: [
-        "Custom farm dashboards",
-        "Unlimited AI agents",
-        "Full API & IoT integration",
-        "Enterprise-grade security",
-        "Dedicated account manager",
-      ],
+      features: ["Custom farm dashboards", "Unlimited AI agents", "Full API & IoT integration", "Enterprise-grade security", "Dedicated account manager"],
       buttonText: "Talk to Sales",
       buttonVariant: "secondary",
     },
@@ -59,6 +69,16 @@ export function PricingSection() {
 
   return (
     <section className="w-full py-16 md:py-24 px-4 overflow-hidden">
+      {/* Toast Notification - Top Center */}
+{showToast && (
+  <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+    <div className="flex items-center gap-2 bg-gradient-to-r from-[#228B22] to-[#4CBB17] text-white px-6 py-3 rounded-2xl shadow-lg animate-slide-down">
+      <Check className="w-5 h-5" />
+      <span>{toastMessage}</span>
+    </div>
+  </div>
+)}
+
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
@@ -107,28 +127,18 @@ export function PricingSection() {
                   : "bg-white/5 backdrop-blur-lg border border-white/10 hover:border-white/20"
               }`}
             >
-              {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                   <div className="relative px-4 py-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full shadow-lg shadow-emerald-500/30 animate-pulse-slow">
-                    <span className="text-xs font-bold text-emerald-900 tracking-wide">
-                      MOST POPULAR
-                    </span>
+                    <span className="text-xs font-bold text-emerald-900 tracking-wide">MOST POPULAR</span>
                     <div className="absolute inset-0 rounded-full bg-white/30 animate-ping opacity-20" />
                   </div>
                 </div>
               )}
 
               <div className="flex flex-col flex-grow">
-                {/* Plan Name */}
-                <h3 className={`text-xl font-bold mb-2 ${plan.popular ? "text-emerald-100" : "text-white"}`}>
-                  {plan.name}
-                </h3>
-
-                {/* Description */}
-                <p className={`text-sm mb-6 ${plan.popular ? "text-emerald-100/80" : "text-emerald-100/60"}`}>
-                  {plan.description}
-                </p>
+                <h3 className={`text-xl font-bold mb-2 ${plan.popular ? "text-emerald-100" : "text-white"}`}>{plan.name}</h3>
+                <p className={`text-sm mb-6 ${plan.popular ? "text-emerald-100/80" : "text-emerald-100/60"}`}>{plan.description}</p>
 
                 {/* Price */}
                 <div className="mb-6">
@@ -136,9 +146,7 @@ export function PricingSection() {
                     <span className="relative block text-4xl md:text-5xl font-bold text-white">
                       {isAnnual ? plan.annualPrice : plan.monthlyPrice}
                     </span>
-                    <span className={`text-emerald-200/70 ${plan.popular ? "text-emerald-100/70" : ""}`}>
-                      /month
-                    </span>
+                    <span className={`text-emerald-200/70 ${plan.popular ? "text-emerald-100/70" : ""}`}>/month</span>
                   </div>
                   {isAnnual && plan.monthlyPrice !== "$0" && (
                     <p className="text-emerald-300/70 text-sm mt-1">
@@ -149,20 +157,36 @@ export function PricingSection() {
 
                 {/* CTA Button */}
                 <div className="mt-auto pt-4">
- <Link href="/login" passHref>
-    <Button
-      variant={plan.buttonVariant as any}
-      className={`w-full rounded-full font-semibold py-5 text-base transition-transform hover:scale-[1.02] ${
-        plan.popular
-          ? "bg-emerald-500 hover:bg-emerald-400 text-emerald-900 shadow-lg shadow-emerald-500/30"
-          : plan.buttonVariant === "outline"
-          ? "border-white/20 text-white hover:bg-white/10"
-          : ""
-      }`}
-    >
-      {plan.buttonText}
-    </Button>
-  </Link>
+                  {plan.buttonText === "Talk to Sales" ? (
+                    <Button
+                      variant={plan.buttonVariant as any}
+                      onClick={() => setSalesDialogOpen(true)}
+                      className={`w-full rounded-full font-semibold py-5 text-base transition-transform hover:scale-[1.02] ${
+                        plan.popular
+                          ? "bg-emerald-500 hover:bg-emerald-400 text-emerald-900 shadow-lg shadow-emerald-500/30"
+                          : plan.buttonVariant === "outline"
+                          ? "border-white/20 text-white hover:bg-white/10"
+                          : ""
+                      }`}
+                    >
+                      {plan.buttonText}
+                    </Button>
+                  ) : (
+                    <Link href="/login" passHref>
+                      <Button
+                        variant={plan.buttonVariant as any}
+                        className={`w-full rounded-full font-semibold py-5 text-base transition-transform hover:scale-[1.02] ${
+                          plan.popular
+                            ? "bg-emerald-500 hover:bg-emerald-400 text-emerald-900 shadow-lg shadow-emerald-500/30"
+                            : plan.buttonVariant === "outline"
+                            ? "border-white/20 text-white hover:bg-white/10"
+                            : ""
+                        }`}
+                      >
+                        {plan.buttonText}
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </div>
 
@@ -172,21 +196,78 @@ export function PricingSection() {
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <Check
-                        className={`mt-0.5 flex-shrink-0 w-5 h-5 ${
-                          plan.popular ? "text-emerald-400" : "text-emerald-300"
-                        }`}
+                        className={`mt-0.5 flex-shrink-0 w-5 h-5 ${plan.popular ? "text-emerald-400" : "text-emerald-300"}`}
                         strokeWidth={2.5}
                       />
-                      <span className={plan.popular ? "text-emerald-100" : "text-emerald-100/80"}>
-                        {feature}
-                      </span>
+                      <span className={plan.popular ? "text-emerald-100" : "text-emerald-100/80"}>{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
           ))}
+
+          
+
         </div>
+
+        {/* Talk to Sales Dialog */}
+        <Dialog open={salesDialogOpen} onOpenChange={setSalesDialogOpen}>
+          <DialogContent className="bg-[#1a3a1a] border border-[#4CBB17] max-w-md rounded-xl p-6">
+            <DialogHeader>
+              <DialogTitle className="text-[#4CBB17] text-2xl font-bold">Talk to Sales</DialogTitle>
+              <DialogDescription className="text-[#b8e6b8] mt-1">
+                Fill in your details and our sales team will contact you shortly.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form className="space-y-4 mt-4" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-[#0f1f14] text-[#b8e6b8]"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-[#0f1f14] text-[#b8e6b8]"
+                required
+              />
+              <input
+                type="text"
+                name="company"
+                placeholder="Company"
+                value={formData.company}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 bg-[#0f1f14] text-[#b8e6b8]"
+                required
+              />
+
+              <DialogFooter className="mt-4 flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSalesDialogOpen(false)}
+                  className="px-4 py-2 rounded-lg border border-[#4CBB17]/40 text-[#b8e6b8] hover:bg-[#228B22]/20 transition w-full sm:w-auto"
+                >
+                  Cancel
+                </button>
+                <Button
+                  type="submit"
+                  className="bg-gradient-to-r from-[#228B22] to-[#4CBB17] text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg w-full sm:w-auto hover:scale-[1.02] transition"
+                >
+                  Submit
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
   );

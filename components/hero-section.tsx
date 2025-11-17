@@ -1,9 +1,16 @@
+"use client"
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Header } from "./headers";
+import { StardustButton } from "@/components/ui/StardustButton";
 import Link from "next/link";
+import { useRouter } from "next/navigation"
+
+
 
 export function HeroSection() {
+  const router = useRouter()
   return (
     <section className="relative w-full min-h-[800px] md:min-h-[900px] lg:min-h-[1000px] flex flex-col items-center justify-start bg-gradient-to-b from-green-900 via-green-800 to-emerald-900 overflow-hidden">
       {/* Header */}
@@ -31,34 +38,136 @@ export function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          {/* Glowing Animated Gradient Button */}
-         <Link href="/login" target="_blank" rel="noopener noreferrer">
-  <div className="relative group">
-    {/* Animated gradient border */}
-    <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 opacity-75 blur-xl animate-gradient-rotation"></div>
-    
-    {/* Button */}
-    <Button className="relative bg-primary text-primary-foreground px-10 py-4 rounded-full font-semibold text-lg shadow-xl shadow-emerald-500/30 transition-all duration-300 transform 
-                       group-hover:scale-105 group-hover:shadow-2xl group-hover:shadow-teal-500/40 active:scale-95">
-      Get Started
-    </Button>
+<div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6">
+  {/* Neon Glowing Gradient Button */}
+  <Link href="/login" target="_blank" rel="noopener noreferrer">
+    <div className="relative group">
+      {/* Animated Neon Glow Background */}
+      <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-emerald-400 via-green-500 to-teal-500 opacity-80 blur-2xl animate-gradient-rotation"></div>
+      
+      {/* Button */}
+      {/* <Button className="relative bg-[#0f1f14] text-white px-16 py-5 md:px-20 md:py-6 rounded-full font-bold text-xl md:text-2xl shadow-[0_0_25px_rgba(16,185,129,0.5)] transition-all duration-300 transform
+                         group-hover:scale-105 group-hover:shadow-[0_0_40px_rgba(16,185,129,0.8)] active:scale-95">
+        Get Started
+      </Button> */}
+   <StardustButton onClick={() => router.push("/login")}>
+        Get Started
+      </StardustButton>
+      {/* Optional Ripple Effect */}
+      <span className="absolute inset-0 rounded-full bg-white opacity-0 transition-opacity duration-500 group-active:opacity-10"></span>
+    </div>
+  </Link>
 
-    {/* Optional ripple effect */}
-    <span className="absolute inset-0 rounded-full bg-white opacity-0 transition-opacity duration-500 group-active:opacity-10"></span>
-  </div>
+  {/* Neon Outline Button */}
+<Link href="#features-section">
+  <button
+    className="stardust-button relative group"
+    style={{
+      '--white': '#e6f3ff',
+      '--bg': '#0a1929',
+      '--radius': '60px', // slightly smaller radius
+      outline: 'none',
+      cursor: 'pointer',
+      border: 0,
+      position: 'relative',
+      borderRadius: 'var(--radius)',
+      background: 'linear-gradient(135deg, #22c55e, #10b981, #34d399)', // brighter green gradient
+      transition: 'all 0.25s ease',
+      boxShadow: `
+        inset 0 0.2rem 0.5rem rgba(34, 197, 94, 0.35),
+        inset 0 -0.1rem 0.3rem rgba(0, 0, 0, 0.5),
+        0 0 2rem rgba(16, 185, 129, 0.7),
+        0 0.3rem 0.7rem rgba(34, 197, 94, 0.9)
+      `,
+    }}
+  >
+    <div
+      className="wrap"
+      style={{
+        fontSize: '20px', // slightly smaller font
+        fontWeight: 600,
+        color: 'rgba(0, 255, 150, 0.95)',
+        padding: '14px 32px', // smaller padding for better fit
+        borderRadius: 'inherit',
+        position: 'relative',
+        overflow: 'hidden',
+        textAlign: 'center',
+      }}
+    >
+      <p
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          margin: 0,
+          transition: 'all 0.25s ease',
+          transform: 'translateY(2%)',
+          maskImage:
+            'linear-gradient(to bottom, rgba(0,255,150,1) 40%, transparent)',
+        }}
+      >
+        <span>✧</span>
+        <span>✦</span>
+        Learn More
+      </p>
+    </div>
+
+    <style>{`
+      .stardust-button .wrap::before,
+      .stardust-button .wrap::after {
+        content: "";
+        position: absolute;
+        transition: all 0.3s ease;
+      }
+
+      .stardust-button .wrap::before {
+        left: -15%;
+        right: -15%;
+        bottom: 25%;
+        top: -120%;
+        border-radius: 50%;
+        background-color: rgba(0, 255, 150, 0.18); // brighter neon glow
+      }
+
+      .stardust-button .wrap::after {
+        left: 6%;
+        right: 6%;
+        top: 12%;
+        bottom: 40%;
+        border-radius: 22px 22px 0 0;
+        box-shadow: inset 0 10px 8px -8px rgba(0, 255, 150, 0.6);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 255, 150, 0.25) 0%,
+          rgba(0, 0, 0, 0) 50%,
+          rgba(0, 0, 0, 0) 100%
+        );
+      }
+
+      .stardust-button:hover .wrap p span:nth-child(1) { display: none; }
+      .stardust-button:hover .wrap p span:nth-child(2) { display: inline-block; }
+
+      .stardust-button:hover {
+        box-shadow:
+          inset 0 0.3rem 0.6rem rgba(0, 255, 150, 0.45),
+          inset 0 -0.15rem 0.35rem rgba(0,0,0,0.6),
+          0 0 3rem rgba(0,255,150,0.8),
+          0 0.5rem 1rem rgba(34, 197, 94, 0.9);
+      }
+
+      .stardust-button:hover .wrap::before { transform: translateY(-5%); }
+      .stardust-button:hover .wrap::after { opacity: 0.45; transform: translateY(5%); }
+      .stardust-button:hover .wrap p { transform: translateY(-4%); }
+      .stardust-button:active { transform: translateY(3px); }
+    `}</style>
+  </button>
 </Link>
 
 
-          <Link href="#features-section">
-            <Button
-              variant="outline"
-              className="bg-transparent border border-white/30 text-white hover:bg-white/10 px-8 py-3.5 rounded-full font-medium text-lg transition-all backdrop-blur-sm"
-            >
-              Learn More
-            </Button>
-          </Link>
-        </div>
+
+</div>
+
       </div>
 
       {/* Decorative bottom wave gradient */}
