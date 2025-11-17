@@ -187,7 +187,11 @@ export default function ChatPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const validTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg', 'text/plain'];
+const validTypes = [
+  'application/pdf',          
+  'application/msword',         
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // DOCX
+];
     if (!validTypes.includes(file.type)) {
       alert("Please upload PDF, Image (JPG/PNG), or Text files only");
       return;
