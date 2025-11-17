@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Sidebar from "@/components/sidebar"
-import Header from "@/components/header"
+import Header from "@/components/headers"
 import { Zap, FileText, ImageIcon, Code, Mic, Monitor, History } from "lucide-react"
 import { ref, query, limitToLast, onValue } from "firebase/database"
 import { rtdb } from "@/lib/firebase"

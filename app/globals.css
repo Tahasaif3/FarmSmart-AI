@@ -1,70 +1,61 @@
+/* =========================
+   Imports
+========================= */
 @import "tailwindcss";
-
 @import "tw-animate-css";
 
 /* =========================
-   CSS Variables - Green Gradient Theme
-========================= */
-:root {
-  --primary: #228B22;
-  --primary-light: #4CBB17;
-  --primary-foreground: #ffffff;
-
-  --background: #0f1f14;
-  --foreground: #ffffff;
-  --card: #1a3a1a;
-  --card-foreground: #ffffff;
-
-  --sidebar-bg: #0f1f14;
-  --sidebar-foreground: #ffffff;
-
-  --accent: #4CBB17;
-  --accent-foreground: #0f1f14;
-
-  --border: #228B22;
-  --input: #1a3a1a;
-  --muted: #2d5a2d;
-  --muted-foreground: #b8e6b8;
-
-  --chart-1: #228B22;
-  --chart-2: #4CBB17;
-  --chart-3: #0f1f14;
-
-  --radius: 0.75rem;
-
-  --gradient-dark: #0f1f14;
-  --gradient-mid: #228B22;
-  --gradient-light: #4CBB17;
-
-  --font-sans: "IBM Plex Mono", monospace;
-}
-
-.dark {
-  --primary: #4CBB17;
-  --primary-foreground: #0f1f14;
-  --background: #0a1408;
-  --foreground: #e8f5e9;
-  --card: #111d0f;
-  --card-foreground: #e8f5e9;
-  --sidebar-bg: #0a1408;
-  --sidebar-foreground: #e8f5e9;
-  --border: #1b331b;
-  --input: #0f1f14;
-  --muted: #1b331b;
-}
-
-/* =========================
-   Base Styles
+   Tailwind Base Overrides
 ========================= */
 @layer base {
+  :root {
+    /* Themeable Colors - Original Vibe */
+    --background: 210 11% 7%; /* #0f1211 */
+    --foreground: 160 14% 93%; /* #e7eceb */
+
+    --muted: 240 2% 16%; /* #27272a */
+    --muted-foreground: 160 14% 93% / 0.7; /* rgba(231,236,235,0.7) */
+    --muted-foreground-light: 160 14% 93% / 0.5; /* rgba(231,236,235,0.5) */
+    --muted-foreground-dark: 160 14% 93% / 0.6; /* rgba(231,236,235,0.6) */
+
+    --card: 220 17% 98% / 0.01;
+    --card-foreground: 160 14% 93%;
+
+    --popover: 210 11% 7%;
+    --popover-foreground: 160 14% 93%;
+
+    --primary: 165 96% 71%; /* #78fcd6 */
+    --primary-foreground: 160 8% 6%; /* #0d0f0e */
+    --primary-dark: 160 100% 50%; /* #00ffb6 */
+    --primary-light: 160 48% 87%; /* lighter teal/green shades */
+
+    --secondary: 160 14% 93%; /* #e7eceb */
+    --secondary-foreground: 165 14% 8%; /* #141a18 */
+
+    --accent: 240 2% 25%; /* #3f3f42 */
+    --accent-foreground: 240 2% 96%; /* #f4f4f5 */
+
+    --border: 240 100% 100% / 0.08;
+    --border-light: 210 17% 6% / 0.1;
+    --border-dark: 210 17% 6% / 0.05;
+
+    --input: 240 2% 16%; /* or any color */
+--destructive: 0 84% 60%; 
+--destructive-foreground: 0 0% 98%;
+
+
+    --ring: 165 96% 71%;
+    --radius: 0.5rem;
+  }
+
   * {
+    border-color: hsl(var(--border));
     box-sizing: border-box;
   }
 
   body {
-    font-family: var(--font-sans);
-    color: var(--foreground);
-    background: linear-gradient(135deg, #0f1f14 0%, #228B22 50%, #4CBB17 100%);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));    font-family: system-ui, sans-serif;
     margin: 0;
     padding: 0;
   }
@@ -81,31 +72,14 @@
 }
 
 /* =========================
-   Custom Utilities
+   Custom Utilities - Animations + Glass Morphism
 ========================= */
 @layer utilities {
-  /* Gradient Backgrounds */
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #0f1f14 0%, #228B22 50%, #4CBB17 100%);
-  }
-
-  .bg-gradient-card {
-    background: linear-gradient(135deg, rgba(34,139,34,0.1) 0%, rgba(76,187,23,0.05) 100%);
-    border: 1px solid rgba(76,187,23,0.3);
-  }
-
-  .text-gradient-primary {
-    background: linear-gradient(135deg, #4CBB17 0%, #228B22 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   /* Glass Morphism */
   .glass-morphism {
-    background: rgba(34,139,34,0.1);
+    background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(76,187,23,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
   }
 
   /* Animations */
@@ -125,22 +99,115 @@
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(76, 187, 23, 0.4);
+  background-color: rgba(165,246,214,0.4); /* primary-light in alpha */
   border-radius: 9999px;
   transition: background-color 0.3s ease;
 }
-::-webkit-scrollbar-thumb:hover { background-color: rgba(76, 187, 23, 0.8); }
-.dark ::-webkit-scrollbar-thumb { background-color: rgba(76, 187, 23, 0.4); }
-.dark ::-webkit-scrollbar-thumb:hover { background-color: rgba(76, 187, 23, 0.8); }
+::-webkit-scrollbar-thumb:hover { background-color: rgba(165,246,214,0.8); }
 
 /* =========================
-   Animations
+   Keyframe Animations
 ========================= */
 @keyframes slideInUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 @keyframes slideInLeft { from {opacity:0; transform:translateX(-20px);} to {opacity:1; transform:translateX(0);} }
 @keyframes slideInRight { from {opacity:0; transform:translateX(20px);} to {opacity:1; transform:translateX(0);} }
 @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 @keyframes shimmer { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
-@keyframes glow { 0%,100%{box-shadow:0 0 10px rgba(76,187,23,0.3),0 0 20px rgba(34,139,34,0.1);} 50%{box-shadow:0 0 20px rgba(76,187,23,0.6),0 0 30px rgba(34,139,34,0.2);} }
+@keyframes glow { 0%,100%{box-shadow:0 0 10px rgba(165,246,214,0.3),0 0 20px rgba(165,246,214,0.1);} 50%{box-shadow:0 0 20px rgba(165,246,214,0.6),0 0 30px rgba(165,246,214,0.2);} }
 @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
 @keyframes gradientShift { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+@keyframes borderRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-gradient-border {
+  background-size: 200% 200%;
+  animation: borderRotate 3s linear infinite;
+}
+
+/* Smooth floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
+}
+
+/* Animated rotating gradient glow */
+@keyframes gradient-rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-gradient-rotation {
+  animation: gradient-rotation 4s linear infinite;
+  z-index: -1;
+}
+
+/* Subtle pulse for background depth */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+@keyframes scroll-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-x {
+  animation: scroll-x linear infinite;
+  display: flex;
+  gap: 2rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.typewriter {
+  display: inline-block;
+  white-space: nowrap;
+  border-right: 3px solid #4CBB17;
+  animation: blinkCursor 0.7s infinite;
+}
+
+@keyframes blinkCursor {
+  0% { border-right-color: transparent; }
+  50% { border-right-color: #4CBB17; }
+  100% { border-right-color: transparent; }
+}
+/* Fix native date picker icon color */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 1;
+}

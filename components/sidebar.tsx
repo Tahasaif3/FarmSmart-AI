@@ -1,240 +1,10 @@
-// "use client"
-
-// import { useEffect, useState } from "react"
-// import { signOut } from "firebase/auth"
-// import { ref, onValue } from "firebase/database"
-// import { auth, rtdb } from "@/lib/firebase"
-// import {
-//   LayoutDashboard,
-//   MessageCircle,
-//   Zap,
-//   FileText,
-//   ImageIcon,
-//   Code,
-//   Mic,
-//   Monitor,
-//   History,
-//   X,
-// } from "lucide-react"
-// import { useRouter, usePathname } from "next/navigation"
-// import Image from "next/image"
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog"
-
-// interface SidebarProps {
-//   isOpen: boolean
-//   userName: string
-//   user: any
-//   onMenuClick?: () => void
-// }
-
-// const menuItems = [
-//   { icon: LayoutDashboard, label: "Dashboard", id: "" },
-//   { icon: MessageCircle, label: "Start new chat", id: "new-chat" },
-//   { icon: Zap, label: "AI chat", id: "chat" },
-//   { icon: FileText, label: "AI text generator", id: "text" },
-//   { icon: ImageIcon, label: "AI image generator", id: "image" },
-//   { icon: Code, label: "AI coding", id: "coding" },
-//   { icon: Mic, label: "AI text to speech", id: "speech" },
-//   { icon: Monitor, label: "AI computer use", id: "computer" },
-//   { icon: History, label: "Chat History", id: "history" },
-// ]
-
-// export default function Sidebar({ isOpen, userName, user, onMenuClick }: SidebarProps) {
-//   const router = useRouter()
-//   const pathname = usePathname()
-//   const [chats, setChats] = useState<any[]>(([]))
-
-//   useEffect(() => {
-//     if (!user?.uid) return
-//     const chatsRef = ref(rtdb, `chats/${user.uid}`)
-//     const unsubscribe = onValue(chatsRef, (snapshot) => {
-//       const data = snapshot.val()
-//       if (data) {
-//         const chatList = Object.entries(data).map(([id, chat]: any) => ({
-//           id,
-//           ...chat,
-//         }))
-//         setChats(chatList.reverse())
-//       } else setChats([])
-//     })
-//     return () => unsubscribe()
-//   }, [user?.uid])
-
-//   const handleLogout = async () => {
-//     await signOut(auth)
-//     router.push("/")
-//   }
-
-//   const visibleChats = chats.slice(0, 3)
-//   const isActive = (id: string) => pathname === `/${id}`
-
-//   return (
-//     <>
-//       {/* Mobile overlay */}
-//       {isOpen && (
-//         <div
-//           onClick={onMenuClick}
-//           className="fixed inset-0 bg-black/40 z-30 md:hidden"
-//         ></div>
-//       )}
-
-//       <div
-//         className={`fixed md:static z-40 h-full flex flex-col bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800
-//         transition-all duration-300 
-//         ${isOpen ? "left-0 w-64" : "-left-64 md:left-0 md:w-20"}
-//         md:transition-none`}
-//       >
-//         {/* Header */}
-//         <div className="p-6 flex items-center justify-between">
-//           <h2
-//             className={`text-2xl font-bold text-emerald-600 dark:text-emerald-400 transition-all duration-300 ${
-//               !isOpen && "opacity-0 w-0 md:opacity-100 md:w-auto"
-//             }`}
-//           >
-//             Soft GPT
-//           </h2>
-
-//           {/* Close icon for mobile */}
-//           <button
-//             onClick={onMenuClick}
-//             className="md:hidden text-gray-700 dark:text-gray-300"
-//           >
-//             <X size={22} />
-//           </button>
-//         </div>
-
-//         {/* Navigation */}
-//         <nav className="flex-1 space-y-1 px-3 overflow-y-auto">
-//           {menuItems.map((item) => {
-//             const Icon = item.icon
-//             const active = isActive(item.id)
-//             return (
-//               <button
-//                 key={item.id}
-//                 onClick={() => router.push(`/${item.id}`)}
-//                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-md transition-all ${
-//                   active
-//                     ? "bg-emerald-600 text-white shadow-sm"
-//                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-//                 }`}
-//               >
-//                 <Icon size={18} />
-//                 <span
-//                   className={`font-medium text-sm truncate ${
-//                     !isOpen && "hidden md:inline"
-//                   }`}
-//                 >
-//                   {item.label}
-//                 </span>
-//               </button>
-//             )
-//           })}
-//         </nav>
-
-//         {/* History */}
-//         <div
-//           className={`px-4 mt-3 border-t border-gray-200 dark:border-gray-700 pt-3 ${
-//             !isOpen && "hidden md:block"
-//           }`}
-//         >
-//           <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3 flex items-center gap-2">
-//             <History size={14} /> History
-//           </p>
-//           <div className="space-y-2 text-sm">
-//             {visibleChats.length > 0 ? (
-//               visibleChats.map((chat) => (
-//                 <p
-//                   key={chat.id}
-//                   onClick={() => router.push(`/chat?chat=${chat.id}`)}
-//                   className="hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer truncate"
-//                 >
-//                   {chat.title || "Untitled chat"}
-//                 </p>
-//               ))
-//             ) : (
-//               <p className="text-gray-400 text-xs">No chats yet</p>
-//             )}
-
-//             <Dialog>
-//               <DialogTrigger asChild>
-//                 <button className="text-emerald-600 dark:text-emerald-400 hover:underline text-xs font-medium">
-//                   View all
-//                 </button>
-//               </DialogTrigger>
-
-//               <DialogContent className="max-w-md bg-white dark:bg-gray-800">
-//                 <DialogHeader>
-//                   <DialogTitle className="text-emerald-600 dark:text-emerald-400">
-//                     All Chats
-//                   </DialogTitle>
-//                 </DialogHeader>
-//                 <div className="max-h-64 overflow-y-auto mt-2 space-y-2">
-//                   {chats.length > 0 ? (
-//                     chats.map((chat) => (
-//                       <div
-//                         key={chat.id}
-//                         onClick={() => router.push(`/chat?chat=${chat.id}`)}
-//                         className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-sm flex justify-between"
-//                       >
-//                         <span>{chat.title || "Untitled chat"}</span>
-//                         <span className="text-xs text-gray-400">
-//                           {chat.createdAt
-//                             ? new Date(chat.createdAt).toLocaleDateString()
-//                             : ""}
-//                         </span>
-//                       </div>
-//                     ))
-//                   ) : (
-//                     <p className="text-gray-400 text-sm text-center py-4">
-//                       No chat history found.
-//                     </p>
-//                   )}
-//                 </div>
-//               </DialogContent>
-//             </Dialog>
-//           </div>
-//         </div>
-
-//         {/* Logout */}
-//         <div className="mt-auto p-4">
-//           <button
-//             onClick={handleLogout}
-//             className="w-full flex items-center gap-3 px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition text-sm font-medium"
-//           >
-//             {user?.photoURL ? (
-//               <Image
-//                 src={user.photoURL}
-//                 alt={userName}
-//                 width={32}
-//                 height={32}
-//                 className="rounded-full border border-gray-300 dark:border-gray-700"
-//               />
-//             ) : (
-//               <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-semibold">
-//                 {userName?.charAt(0).toUpperCase() || "U"}
-//               </div>
-//             )}
-//             <span className={`${!isOpen && "hidden md:inline"}`}>Logout</span>
-//           </button>
-//         </div>
-//       </div>
-//     </>
-//   )
-// }
-
 "use client"
 
 import { useEffect, useState } from "react"
 import { signOut } from "firebase/auth"
 import { ref, onValue } from "firebase/database"
 import { auth, rtdb } from "@/lib/firebase"
-import { LayoutDashboard, MessageCircle, History, X } from 'lucide-react'
+import { LayoutDashboard, MessageCircle, History, X, Menu } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from "next/image"
 import {
@@ -253,8 +23,7 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", id: "" },
-  // { icon: MessageCircle, label: "Start new chat", id: "new-chat" },
+  { icon: LayoutDashboard, label: "Dashboard", id: "dashboard" },
   { icon: MessageCircle, label: "AI Chat", id: "chat" },
   { icon: History, label: "Chat History", id: "history" },
 ]
@@ -262,7 +31,7 @@ const menuItems = [
 export default function Sidebar({ isOpen, userName, user, onMenuClick }: SidebarProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const [chats, setChats] = useState<any[]>(([]))
+  const [chats, setChats] = useState<any[]>([])
 
   useEffect(() => {
     if (!user?.uid) return
@@ -282,7 +51,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
   const handleLogout = async () => {
     await signOut(auth)
-    router.push("/")
+    router.push("/login")
   }
 
   const visibleChats = chats.slice(0, 3)
@@ -290,33 +59,38 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
   return (
     <>
-      {/* Mobile overlay */}
+      {/* Overlay (appears when sidebar is open on any screen) */}
       {isOpen && (
         <div
           onClick={onMenuClick}
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          className="fixed inset-0 bg-black/50 z-30"
         ></div>
       )}
 
+      {/* Desktop toggle button (always visible on all screens) */}
+      <button
+        onClick={onMenuClick}
+        className="fixed top-4 left-4 z-40 flex items-center justify-center w-10 h-10 rounded-md bg-[#228B22] text-white shadow-lg hover:bg-[#4CBB17] transition md:top-6 md:left-6"
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+      >
+        {isOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* Sidebar - slides in/out on all screens */}
       <div
-        className={`fixed md:static z-40 h-full flex flex-col bg-gradient-to-br from-[#0f1f14] via-[#228B22]/20 to-[#4CBB17]/10 border-r-2 border-[#4CBB17] backdrop-blur-sm
-        transition-all duration-300 
-        ${isOpen ? "left-0 w-64" : "-left-64 md:left-0 md:w-20"}
-        md:transition-none`}
+        className={`fixed z-40 h-full flex flex-col bg-gradient-to-br from-[#0f1f14] via-[#228B22]/20 to-[#4CBB17]/10 border-r-2 border-[#4CBB17] backdrop-blur-sm
+        transition-all duration-300 ease-in-out transform
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        w-64`}
       >
         {/* Header */}
-        <div className="p-6 flex items-center justify-between border-b-2 border-[#4CBB17]/40 animate-slide-in-left">
-          <h2
-            className={`text-2xl font-bold text-gradient-primary transition-all duration-300 ${
-              !isOpen && "opacity-0 w-0 md:opacity-100 md:w-auto"
-            }`}
-          >
-            Soft GPT
+        <div className="p-6 flex items-center justify-between border-b-2 border-[#4CBB17]/40">
+          <h2 className={`text-2xl font-bold text-gradient-primary ${isOpen ? "opacity-100" : "opacity-0"}`}>
+            FarmSmart AI
           </h2>
-
           <button
             onClick={onMenuClick}
-            className="md:hidden text-[#4CBB17] hover:text-[#228B22] transition"
+            className="text-[#4CBB17] hover:text-[#228B22] transition md:hidden"
           >
             <X size={22} />
           </button>
@@ -330,20 +104,18 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
             return (
               <button
                 key={item.id}
-                onClick={() => router.push(`/${item.id}`)}
-                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all animate-slide-in-left ${
+                onClick={() => {
+                  router.push(`/${item.id}`)
+                  onMenuClick?.() // close after click
+                }}
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
                   active
-                    ? "bg-gradient-to-r from-[#228B22] to-[#4CBB17] text-white shadow-lg shadow-[#228B22]/50 animate-glow"
+                    ? "bg-gradient-to-r from-[#228B22] to-[#4CBB17] text-white shadow-lg shadow-[#228B22]/50"
                     : "text-[#b8e6b8] hover:bg-[#228B22]/30 hover:shadow-lg hover:shadow-[#228B22]/20"
                 }`}
-                style={{ animationDelay: `${idx * 100}ms` }}
               >
                 <Icon size={18} />
-                <span
-                  className={`font-medium text-sm truncate ${
-                    !isOpen && "hidden md:inline"
-                  }`}
-                >
+                <span className={`font-medium text-sm truncate ${!isOpen && "opacity-0"}`}>
                   {item.label}
                 </span>
               </button>
@@ -352,22 +124,20 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         </nav>
 
         {/* History */}
-        <div
-          className={`px-4 mt-3 border-t-2 border-[#4CBB17]/40 pt-3 ${
-            !isOpen && "hidden md:block"
-          }`}
-        >
-          <p className="text-xs font-semibold text-[#4CBB17] uppercase mb-3 flex items-center gap-2 animate-slide-in-left">
+        <div className={`px-4 mt-3 border-t-2 border-[#4CBB17]/40 pt-3 ${!isOpen && "opacity-0"}`}>
+          <p className="text-xs font-semibold text-[#4CBB17] uppercase mb-3 flex items-center gap-2">
             <History size={14} /> Recent Chats
           </p>
           <div className="space-y-2 text-sm">
             {visibleChats.length > 0 ? (
-              visibleChats.map((chat, idx) => (
+              visibleChats.map((chat) => (
                 <p
                   key={chat.id}
-                  onClick={() => router.push(`/chat?chat=${chat.id}`)}
-                  className="hover:text-[#4CBB17] cursor-pointer truncate text-[#b8e6b8] hover:bg-[#228B22]/20 px-2 py-1 rounded-lg transition animate-slide-in-left"
-                  style={{ animationDelay: `${idx * 50}ms` }}
+                  onClick={() => {
+                    router.push(`/chat?chat=${chat.id}`)
+                    onMenuClick?.()
+                  }}
+                  className="hover:text-[#4CBB17] cursor-pointer truncate text-[#b8e6b8] hover:bg-[#228B22]/20 px-2 py-1 rounded-lg transition"
                 >
                   {chat.title || "Untitled chat"}
                 </p>
@@ -383,7 +153,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 </button>
               </DialogTrigger>
 
-              <DialogContent className="bg-gradient-to-br from-[#1a3a1a] to-[#0f1f14] border-[#4CBB17] glass-morphism">
+              <DialogContent className="bg-gradient-to-br from-[#1a3a1a] to-[#0f1f14] border-[#4CBB17]">
                 <DialogHeader>
                   <DialogTitle className="text-gradient-primary">
                     All Chats
@@ -417,7 +187,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         </div>
 
         {/* Logout */}
-        <div className="mt-auto p-4 border-t-2 border-[#4CBB17]/40 animate-slide-in-left">
+        <div className="mt-auto p-4 border-t-2 border-[#4CBB17]/40">
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-[#228B22]/30 to-[#4CBB17]/20 hover:from-[#228B22]/50 hover:to-[#4CBB17]/40 transition text-sm font-medium text-[#b8e6b8] hover:text-[#4CBB17] hover:shadow-lg hover:shadow-[#228B22]/20"
@@ -435,7 +205,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 {userName?.charAt(0).toUpperCase() || "U"}
               </div>
             )}
-            <span className={`${!isOpen && "hidden md:inline"}`}>Logout</span>
+            <span className={isOpen ? "" : "opacity-0"}>Logout</span>
           </button>
         </div>
       </div>

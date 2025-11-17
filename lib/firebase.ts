@@ -3,15 +3,26 @@ import { initializeApp } from "firebase/app"
 import { getAuth, GoogleAuthProvider } from "firebase/auth"
 import { getDatabase } from "firebase/database"
 
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAnqRm4N-02zRDpRAeNNBDPIHwZnwWLDpw",
+//   authDomain: "softgpt-b3df3.firebaseapp.com",
+//   databaseURL: "https://softgpt-b3df3-default-rtdb.firebaseio.com", // ✅ RTDB URL
+//   projectId: "softgpt-b3df3",
+//   storageBucket: "softgpt-b3df3.firebasestorage.app",
+//   messagingSenderId: "987218911563",
+//   appId: "1:987218911563:web:b950092bf663fad449c8ce",
+// }
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAnqRm4N-02zRDpRAeNNBDPIHwZnwWLDpw",
-  authDomain: "softgpt-b3df3.firebaseapp.com",
-  databaseURL: "https://softgpt-b3df3-default-rtdb.firebaseio.com", // ✅ RTDB URL
-  projectId: "softgpt-b3df3",
-  storageBucket: "softgpt-b3df3.firebasestorage.app",
-  messagingSenderId: "987218911563",
-  appId: "1:987218911563:web:b950092bf663fad449c8ce",
-}
+  apiKey: "AIzaSyDSKKpj5sgoUTSmgzVm78CDAXH0HqTZXkY",
+  authDomain: "my-portfolio-4576f.firebaseapp.com",
+  databaseURL: "https://my-portfolio-4576f-default-rtdb.firebaseio.com",
+  projectId: "my-portfolio-4576f",
+  storageBucket: "my-portfolio-4576f.firebasestorage.app",
+  messagingSenderId: "464123686245",
+  appId: "1:464123686245:web:39833ba6947e8eced6c58c"
+};
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
