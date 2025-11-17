@@ -95,7 +95,7 @@ export default function Header({
         <div className="flex items-center gap-4">
           <button
             onClick={onMenuClick}
-            className="p-2 rounded-lg hover:bg-[#228B22]/40 lg:hidden transition hover:shadow-lg hover:shadow-[#228B22]/20"
+            className="p-2 rounded-lg cursor-pointer hover:bg-[#228B22]/40 lg:hidden transition hover:shadow-lg hover:shadow-[#228B22]/20 cursor-pointe"
           >
             <Menu size={22} className="text-[#4CBB17]" />
           </button>

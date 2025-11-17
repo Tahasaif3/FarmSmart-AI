@@ -144,7 +144,7 @@ export default function LoginPage() {
           <button
             onClick={handleGoogleSignIn}
             disabled={loading}
-            className={`w-full flex items-center justify-center gap-2 rounded-lg py-3 px-4 font-medium transition mb-6 disabled:opacity-50 border ${
+            className={`w-full flex items-center justify-center gap-2 cursor-pointer rounded-lg py-3 px-4 font-medium transition mb-6 disabled:opacity-50 border ${
               isDark
                 ? "bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
                 : "bg-white hover:bg-gray-50 text-gray-900 border-gray-300"
@@ -248,7 +248,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
-                  className="text-sm text-emerald-600 hover:underline font-medium"
+                  className="text-sm text-emerald-600 hover:underline font-medium cursor-pointer"
                 >
                   Forgot password?
                 </button>
@@ -258,7 +258,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50 mt-6"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3  cursor-pointer px-4 rounded-lg transition disabled:opacity-50 mt-6"
             >
               {loading ? "Loading..." : isSignUp ? "Sign up" : "Sign in"}
             </button>
@@ -268,14 +268,14 @@ export default function LoginPage() {
             {isSignUp ? (
               <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 Already have an account?{" "}
-                <button onClick={() => setIsSignUp(false)} className="text-emerald-600 hover:underline font-medium">
+                <button onClick={() => setIsSignUp(false)} className="text-emerald-600 hover:underline cursor-pointer font-medium">
                   Sign in
                 </button>
               </p>
             ) : (
               <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 Not registered yet?{" "}
-                <button onClick={() => setIsSignUp(true)} className="text-emerald-600 hover:underline font-medium">
+                <button onClick={() => setIsSignUp(true)} className="text-emerald-600 hover:underline  cursor-pointer font-medium">
                   Create an Account
                 </button>
               </p>
@@ -303,7 +303,7 @@ export default function LoginPage() {
                   setSuccess("")
                   setForgotPasswordEmail("")
                 }}
-                className={`p-1 hover:bg-gray-200 dark:hover:bg-gray-800 rounded transition ${
+                className={`p-1 hover:bg-gray-200 dark:hover:bg-gray-800 rounded cursor-pointer transition ${
                   isDark ? "text-gray-400" : "text-gray-500"
                 }`}
               >
@@ -359,7 +359,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={forgotPasswordLoading}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer font-semibold py-3 px-4 rounded-lg transition disabled:opacity-50"
               >
                 {forgotPasswordLoading ? "Sending..." : "Send Reset Link"}
               </button>
@@ -372,7 +372,7 @@ export default function LoginPage() {
                   setSuccess("")
                   setForgotPasswordEmail("")
                 }}
-                className={`w-full py-3 px-4 rounded-lg transition border ${
+                className={`w-full py-3 px-4 rounded-lg cursor-pointer transition border ${
                   isDark
                     ? "bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
                     : "bg-gray-50 hover:bg-gray-100 text-gray-900 border-gray-300"
@@ -415,7 +415,7 @@ export default function LoginPage() {
           >
             <button
               onClick={() => setTheme("light")}
-              className={`px-5 py-2 text-sm font-medium transition-colors ${
+              className={`px-5 py-2 text-sm font-medium cursor-pointer transition-colors ${
                 !isDark
                   ? "bg-white text-emerald-700"
                   : "bg-transparent text-emerald-200 hover:bg-emerald-700/30"
@@ -425,7 +425,7 @@ export default function LoginPage() {
             </button>
             <button
               onClick={() => setTheme("dark")}
-              className={`px-5 py-2 text-sm font-medium transition-colors ${
+              className={`px-5 py-2 text-sm font-medium cursor-pointer transition-colors ${
                 isDark
                   ? "bg-emerald-600 text-white"
                   : "bg-transparent text-white hover:bg-white/20"

@@ -268,7 +268,7 @@ export default function ChatPage() {
             <button
               onClick={handleSendMessage}
               disabled={isLoading || isSending}
-              className="bg-gradient-to-r from-[#228B22] to-[#4CBB17] hover:from-[#4CBB17] hover:to-[#228B22] text-white p-2 rounded-lg transition shadow-lg shadow-[#228B22]/50 hover:shadow-xl hover:shadow-[#4CBB17]/60 disabled:opacity-50 transform hover:scale-105"
+              className="bg-gradient-to-r from-[#228B22] to-[#4CBB17] hover:from-[#4CBB17] hover:to-[#228B22] text-white p-2 cursor-pointer rounded-lg transition shadow-lg shadow-[#228B22]/50 hover:shadow-xl hover:shadow-[#4CBB17]/60 disabled:opacity-50 transform hover:scale-105"
             >
               {isLoading ? <Loader className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
             </button>
