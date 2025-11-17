@@ -9,6 +9,8 @@ import { FAQSection } from "@/components/faq-section"
 import { CTASection } from "@/components/cta-section"
 import { FooterSection } from "@/components/footer-section"
 import { AnimatedSection } from "@/components/animated-section"
+import { AgentsList } from "@/components/agents";
+
 
 export default function LandingPage() {
   return (
@@ -45,6 +47,9 @@ export default function LandingPage() {
           delay={0.2}
         >
           <TestimonialGridSection />
+        </AnimatedSection>
+         <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
+          <AgentsList />
         </AnimatedSection>
         <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
           <FAQSection />

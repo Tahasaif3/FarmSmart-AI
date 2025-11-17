@@ -8,6 +8,9 @@ import Header from "@/components/header";
 import { useUser } from "@/app/context/user-context";
 import { ref, push, remove, update, onValue, query, orderByChild, get } from "firebase/database";
 import { rtdb } from "@/lib/firebase";
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -187,20 +190,25 @@ export default function ChatPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-const validTypes = [
-  'application/pdf',          
-  'application/msword',         
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // DOCX
-];
-    if (!validTypes.includes(file.type)) {
-      alert("Please upload PDF, Image (JPG/PNG), or Text files only");
-      return;
-    }
 
-    if (file.size > 10 * 1024 * 1024) {
-      alert("File size must be less than 10MB");
-      return;
-    }
+  const validTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+
+  if (!validTypes.includes(file.type)) {
+    toast.error('Please upload only PDF, DOC, or DOCX files.');
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    toast.error('File size must be less than 10MB.');
+    return;
+  }
+
+   toast.success('File selected successfully!');
+
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -486,7 +494,28 @@ const validTypes = [
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-[#0f1f14] via-[#1b3a1b]/10 to-[#4CBB17]/5 text-[#b8e6b8]">
-      <input
+<ToastContainer
+  position="top-center"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="dark"
+  style={{ width: '100%' }} // optional: ensures full-width centering on mobile
+  toastStyle={{
+    background: 'linear-gradient(to right, #228B22, #4CBB17)',
+    color: '#0f1f14',
+    fontWeight: 'bold',
+    borderRadius: '1rem',
+    boxShadow: '0 4px 20px rgba(34, 139, 34, 0.5)',
+    backdropFilter: 'blur(4px)',
+    border: '1px solid #4CBB17',
+  }}
+/>      <input
         ref={fileInputRef}
         type="file"
         accept=".pdf,.jpg,.jpeg,.png,.txt"
@@ -567,7 +596,7 @@ const validTypes = [
                       handleSendMessage();
                     }
                   }}
-                  placeholder="Message Soft GPT AI..."
+                  placeholder="Message FarmSmart AI..."
                   disabled={isLoading}
                   className="flex-1 text-sm sm:text-base outline-none text-[#b8e6b8] placeholder-[#b8e6b8]/70 bg-transparent disabled:opacity-50"
                 />
