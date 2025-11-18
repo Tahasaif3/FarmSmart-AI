@@ -38,6 +38,8 @@ export default function Header({
           </h2>
         </div>
 
+        
+
         {/* Right - Profile (Clickable) */}
         <Link href="/profile" className="flex items-center gap-3 hover:opacity-90 transition">
           {user?.photoURL ? (

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { signOut } from "firebase/auth"
 import { ref, onValue } from "firebase/database"
 import { auth, rtdb } from "@/lib/firebase"
-import { LayoutDashboard, MessageCircle, History, X, Menu } from 'lucide-react'
+import { LayoutDashboard, MessageCircle, History, X, Menu, Plus } from 'lucide-react'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from "next/image"
 import {
@@ -59,7 +59,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
   return (
     <>
-      {/* Overlay (appears when sidebar is open on any screen) */}
+      {/* Overlay */}
       {isOpen && (
         <div
           onClick={onMenuClick}
@@ -67,7 +67,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         ></div>
       )}
 
-      {/* Desktop toggle button (always visible on all screens) */}
+      {/* Toggle Button (Mobile & Desktop) */}
       <button
         onClick={onMenuClick}
         className="fixed top-4 left-4 z-40 flex items-center justify-center w-10 h-10 rounded-md bg-[#228B22] text-white shadow-lg hover:bg-[#4CBB17] transition md:top-6 md:left-6"
@@ -76,7 +76,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar - slides in/out on all screens */}
+      {/* Sidebar */}
       <div
         className={`fixed z-40 h-full flex flex-col bg-gradient-to-br from-[#0f1f14] via-[#228B22]/20 to-[#4CBB17]/10 border-r-2 border-[#4CBB17] backdrop-blur-sm
         transition-all duration-300 ease-in-out transform
@@ -98,7 +98,25 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
         {/* Navigation */}
         <nav className="flex-1 space-y-2 px-3 overflow-y-auto py-4">
-          {menuItems.map((item, idx) => {
+{/* New Chat Button */}
+<button
+  onClick={() => {
+    router.push("/chat?new=true")
+    onMenuClick?.()
+  }}
+  className="w-full flex items-center gap-3 px-3 py-3 rounded-xl 
+  bg-gradient-to-r from-[#228B22]/30 to-[#4CBB17]/20 
+  text-[#b8e6b8] hover:bg-[#228B22]/40 hover:shadow-lg 
+  hover:shadow-[#228B22]/30 transition cursor-pointer"
+>
+  <Plus size={18} />
+  <span className={`font-medium text-sm truncate ${!isOpen && "opacity-0"}`}>
+    New Chat
+  </span>
+</button>
+
+
+          {menuItems.map((item) => {
             const Icon = item.icon
             const active = isActive(item.id)
             return (
@@ -106,9 +124,9 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                 key={item.id}
                 onClick={() => {
                   router.push(`/${item.id}`)
-                  onMenuClick?.() // close after click
+                  onMenuClick?.()
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all ${
+                className={`w-full flex items-center gap-3 px-3 py-3 rounded-xl transition-all cursor-pointer ${
                   active
                     ? "bg-gradient-to-r from-[#228B22] to-[#4CBB17] text-white shadow-lg shadow-[#228B22]/50"
                     : "text-[#b8e6b8] hover:bg-[#228B22]/30 hover:shadow-lg hover:shadow-[#228B22]/20"
@@ -148,7 +166,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
 
             <Dialog>
               <DialogTrigger asChild>
-                <button className="text-[#4CBB17] hover:underline text-xs font-medium mt-2 hover:text-[#228B22]">
+                <button className="text-[#4CBB17] hover:underline text-xs font-medium mt-2 hover:text-[#228B22] cursor-pointer">
                   View all
                 </button>
               </DialogTrigger>
@@ -164,7 +182,10 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
                     chats.map((chat) => (
                       <div
                         key={chat.id}
-                        onClick={() => router.push(`/chat?chat=${chat.id}`)}
+                        onClick={() => {
+                          router.push(`/chat?chat=${chat.id}`)
+                          onMenuClick?.()
+                        }}
                         className="p-2 rounded-lg hover:bg-[#228B22]/30 cursor-pointer text-sm flex justify-between transition text-[#b8e6b8] hover:text-[#4CBB17]"
                       >
                         <span>{chat.title || "Untitled chat"}</span>
@@ -190,7 +211,7 @@ export default function Sidebar({ isOpen, userName, user, onMenuClick }: Sidebar
         <div className="mt-auto p-4 border-t-2 border-[#4CBB17]/40">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-[#228B22]/30 to-[#4CBB17]/20 hover:from-[#228B22]/50 hover:to-[#4CBB17]/40 transition text-sm font-medium text-[#b8e6b8] hover:text-[#4CBB17] hover:shadow-lg hover:shadow-[#228B22]/20"
+            className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-gradient-to-r from-[#228B22]/30 to-[#4CBB17]/20 hover:from-[#228B22]/50 hover:to-[#4CBB17]/40 transition text-sm font-medium text-[#b8e6b8] hover:text-[#4CBB17] hover:shadow-lg hover:shadow-[#228B22]/20 cursor-pointer"
           >
             {user?.photoURL ? (
               <Image

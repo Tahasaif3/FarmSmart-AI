@@ -71,7 +71,7 @@ export function Header() {
             <Link href="/login" passHref>
               <Button
                 variant="default"
-                className="bg-emerald-500 hover:bg-emerald-400 text-emerald-900 font-semibold px-5 py-2 rounded-full shadow-md hover:shadow-emerald-500/20 transition-all duration-200"
+                className="bg-emerald-500 hover:bg-emerald-400 text-emerald-900 font-semibold px-5 py-2 rounded-full shadow-md hover:shadow-emerald-500/20 cursor-pointer transition-all duration-200"
               >
                 Try for Free
               </Button>
@@ -107,16 +107,15 @@ export function Header() {
                   ))}
                   <div className="pt-4 mt-4 border-t border-white/10">
                     <Link href="/login" passHref>
-                      <Button
-                        className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-900 font-semibold py-5 rounded-full"
-                        onClick={() => {
-                          // Close sheet after click
-                          const closeBtn = document.querySelector('[data-state="open"] [data-close]');
-                          (closeBtn as HTMLElement | null)?.click?.();
-                        }}
-                      >
-                        Try for Free
-                      </Button>
+                    <Button
+  className="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-900 font-semibold py-5 rounded-full cursor-pointer"
+  onClick={() => {
+    const closeBtn = document.querySelector('[data-state="open"] [data-close]');
+    (closeBtn as HTMLElement | null)?.click?.();
+  }}
+>
+  Try for Free
+</Button>
                     </Link>
                   </div>
                 </nav>
