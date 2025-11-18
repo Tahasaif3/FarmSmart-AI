@@ -12,6 +12,9 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"
+import { ref, push } from "firebase/database";
+import { rtdb } from "@/lib/firebase"; // your firebase file path
+
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(true);
@@ -29,12 +32,33 @@ const showToastNotification = (message: string) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = (e: React.FormEvent) => {
+const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-  setSalesDialogOpen(false);
-  showToastNotification(`Thanks ${formData.name}, our sales team will contact you soon!`);
-  setFormData({ name: "", email: "", company: "" });
+
+  try {
+    // Save form data in Firebase Realtime Database
+    await push(ref(rtdb, "salesRequests"), {
+      name: formData.name,
+      email: formData.email,
+      company: formData.company,
+      createdAt: new Date().toISOString(),
+    });
+
+    // Close modal
+    setSalesDialogOpen(false);
+
+    // Show toast notification
+    showToastNotification(`Thanks ${formData.name}, our sales team will contact you soon!`);
+
+    // Clear form
+    setFormData({ name: "", email: "", company: "" });
+
+  } catch (error) {
+    console.error("Error saving data:", error);
+    showToastNotification("Something went wrong. Please try again.");
+  }
 };
+
 
   const pricingPlans = [
     {
