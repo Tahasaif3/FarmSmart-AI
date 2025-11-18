@@ -1,4 +1,3 @@
-// app/chat/page.tsx
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -56,6 +55,10 @@ export default function ChatPage() {
   const [chatTitle, setChatTitle] = useState("New Chat");
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  
+  // 🔥 NEW: Session ID state
+  const [sessionId, setSessionId] = useState<string>("");
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -94,6 +97,7 @@ export default function ChatPage() {
     }
   }, [user?.uid]);
 
+  // 🔥 UPDATED: Load chat with session restoration
   const loadChat = (id: string) => {
     if (!user?.uid) return;
 
@@ -113,6 +117,16 @@ export default function ChatPage() {
     const unsubscribeChat = onValue(chatRef, (snapshot) => {
       const chatData = snapshot.val();
       setChatTitle(chatData?.title || "New Chat");
+      
+      // 🔥 NEW: Restore session_id from Firebase
+      if (chatData?.session_id) {
+        setSessionId(chatData.session_id);
+        console.log("♻️ Restored session:", chatData.session_id);
+      } else {
+        // Clear session for old chats without session_id
+        setSessionId("");
+        console.log("🆕 No session found - will create new");
+      }
     });
 
     return () => {
@@ -121,6 +135,7 @@ export default function ChatPage() {
     };
   };
 
+  // 🔥 UPDATED: Create new chat and clear session
   const createNewChat = async (): Promise<string> => {
     if (!user?.uid) return "";
     try {
@@ -132,10 +147,16 @@ export default function ChatPage() {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         messages: {},
+        session_id: "", // Initialize empty session
       });
       setChatId(newChatRef.key || "");
       setChatTitle(title);
       setMessages([]);
+      
+      // 🔥 NEW: Clear session for new chat
+      setSessionId("");
+      console.log("🆕 New chat created - session cleared");
+      
       return newChatRef.key || "";
     } catch (error) {
       console.error("Error creating chat:", error);
@@ -190,25 +211,23 @@ export default function ChatPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const validTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
 
-  const validTypes = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-  ];
+    if (!validTypes.includes(file.type)) {
+      toast.error('Please upload only PDF, DOC, or DOCX files.');
+      return;
+    }
 
-  if (!validTypes.includes(file.type)) {
-    toast.error('Please upload only PDF, DOC, or DOCX files.');
-    return;
-  }
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size must be less than 10MB.');
+      return;
+    }
 
-  if (file.size > 10 * 1024 * 1024) {
-    toast.error('File size must be less than 10MB.');
-    return;
-  }
-
-   toast.success('File selected successfully!');
-
+    toast.success('File selected successfully!');
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -256,6 +275,21 @@ export default function ChatPage() {
     }
   };
 
+  // 🔥 NEW: Save session to Firebase
+  const saveSessionToFirebase = async (newSessionId: string) => {
+    if (!user?.uid || !chatId) return;
+    try {
+      await update(ref(rtdb, `chats/${user.uid}/${chatId}`), {
+        session_id: newSessionId,
+        sessionUpdatedAt: Date.now()
+      });
+      console.log("💾 Session saved to Firebase:", newSessionId);
+    } catch (error) {
+      console.error("Error saving session:", error);
+    }
+  };
+
+  // 🔥 UPDATED: Call AI endpoint with session management
   const callAIEndpoint = async (message: string, fileUrl?: string) => {
     try {
       if (fileUrl && uploadedFile) {
@@ -263,6 +297,12 @@ export default function ChatPage() {
         formData.append("file", uploadedFile.file);
         formData.append("question", message);
         formData.append("language", "auto");
+        
+        // 🔥 NEW: Include session_id if available
+        if (sessionId) {
+          formData.append("session_id", sessionId);
+          console.log("📤 Sending session_id with file:", sessionId);
+        }
 
         const response = await fetch(`${API_BASE_URL}/upload_and_query`, {
           method: "POST",
@@ -271,9 +311,24 @@ export default function ChatPage() {
 
         if (!response.ok) throw new Error("File query API failed");
         const data = await response.json();
+        
+        // 🔥 NEW: Store session_id from response
+        if (data.session_id) {
+          if (!sessionId) {
+            setSessionId(data.session_id);
+            await saveSessionToFirebase(data.session_id);
+            console.log("✅ Session started (file):", data.session_id);
+          } else {
+            console.log("♻️ Session continued (file):", data.session_id);
+          }
+        }
+        
         return data.answer || "I couldn't analyze the document. Please try again.";
       }
 
+      // 🔥 UPDATED: Regular query with session_id
+      console.log("📤 Sending query with session_id:", sessionId || "none");
+      
       const response = await fetch(`${API_BASE_URL}/query`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -281,11 +336,28 @@ export default function ChatPage() {
           query: message,
           language: "auto",
           location: "Lahore",
+          session_id: sessionId || undefined, // 🔥 Send session_id if available
         }),
       });
       
       if (!response.ok) throw new Error("API request failed");
       const data = await response.json();
+      
+      // 🔥 NEW: Store session_id from first response
+      if (data.session_id) {
+        if (!sessionId) {
+          setSessionId(data.session_id);
+          await saveSessionToFirebase(data.session_id);
+          console.log("✅ Session started:", data.session_id);
+        } else if (data.session_id !== sessionId) {
+          console.warn("⚠️ Session ID changed:", sessionId, "→", data.session_id);
+          setSessionId(data.session_id);
+          await saveSessionToFirebase(data.session_id);
+        } else {
+          console.log("♻️ Session continued:", data.session_id);
+        }
+      }
+      
       return data.response || data.message || data.result || "I'm not sure how to help with that.";
     } catch (error) {
       console.error("API Error:", error);
@@ -418,12 +490,15 @@ export default function ChatPage() {
     }
   };
 
+  // 🔥 UPDATED: Clear session when deleting chat
   const deleteChat = async () => {
     if (!user?.uid || !chatId) return;
     try {
       await remove(ref(rtdb, `chats/${user.uid}/${chatId}`));
       setChatId("");
       setMessages([]);
+      setSessionId(""); // 🔥 Clear session
+      console.log("🗑️ Chat deleted - session cleared");
       window.history.back();
     } catch (error) {
       console.error("Error deleting chat:", error);
